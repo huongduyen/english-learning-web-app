@@ -1,0 +1,43 @@
+// Prisma Schema for English Learning Platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  role      UserRole @default(LEARNER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile   UserProfile?
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  TEACHER
+  LEARNER
+}
+
+model UserProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetLevel     String?  // e.g., "A1", "B2", "C1"
+  nativeLanguage  String?  @default("vi")
+  dailyGoalMinutes Int     @default(15)
+  streakDays      Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("user_profiles")
+}

@@ -1,0 +1,31 @@
+{
+  "name": "english-learning-web-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Professional English Learning Web Application Monorepo",
+  "scripts": {
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run start:dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:backend": "npm --prefix backend run build",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "lint:backend": "npm --prefix backend run lint",
+    "test:backend": "npm --prefix backend run test",
+    "test:frontend": "npm --prefix frontend run test:e2e",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres",
+    "prisma:generate": "npm --prefix backend run prisma:generate",
+    "prisma:migrate": "npm --prefix backend run prisma:migrate"
+  },
+  "keywords": [
+    "english-learning",
+    "react",
+    "nestjs",
+    "typescript",
+    "prisma",
+    "postgresql"
+  ],
+  "author": "",
+  "license": "UNLICENSED"
+}

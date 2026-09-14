@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  ConflictException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -29,7 +25,9 @@ export class AuthService {
    */
   sanitizeUser(user: any) {
     if (!user) return null;
-    const { password, hashedRefreshToken, ...safeUser } = user;
+    const safeUser = { ...user };
+    delete safeUser.password;
+    delete safeUser.hashedRefreshToken;
     return safeUser;
   }
 
@@ -47,7 +45,10 @@ export class AuthService {
       'JWT_REFRESH_SECRET',
       'super-secret-jwt-refresh-key-2026-english-learning',
     );
-    const refreshExpiration = this.configService.get<string>('JWT_REFRESH_EXPIRATION', '7d');
+    const refreshExpiration = this.configService.get<string>(
+      'JWT_REFRESH_EXPIRATION',
+      '7d',
+    );
 
     const payload: TokenPayload = {
       sub: user.id,

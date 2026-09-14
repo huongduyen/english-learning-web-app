@@ -1,7 +1,6 @@
 import { AuthResponse } from '../types/auth';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
 
 export const ACCESS_TOKEN_KEY = 'auth_access_token';
 export const REFRESH_TOKEN_KEY = 'auth_refresh_token';
@@ -26,9 +25,9 @@ export const clearStoredTokens = (): void => {
 
 export class ApiError extends Error {
   statusCode: number;
-  data: any;
+  data: unknown;
 
-  constructor(message: string, statusCode: number, data?: any) {
+  constructor(message: string, statusCode: number, data?: unknown) {
     super(message);
     this.name = 'ApiError';
     this.statusCode = statusCode;
@@ -85,10 +84,10 @@ export const refreshSessionTokens = async (): Promise<string | null> => {
 /**
  * Universal fetch wrapper with automatic JWT authorization and 401 token refresh retry.
  */
-export async function apiRequest<T = any>(
+export async function apiRequest<T = unknown>(
   endpoint: string,
   options: RequestInit = {},
-  retry = true,
+  retry = true
 ): Promise<T> {
   const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
 
@@ -141,7 +140,11 @@ export async function apiRequest<T = any>(
           }
           try {
             headers.set('Authorization', `Bearer ${newToken}`);
-            const retryRes = await apiRequest<T>(endpoint, { ...options, headers }, false);
+            const retryRes = await apiRequest<T>(
+              endpoint,
+              { ...options, headers },
+              false
+            );
             resolve(retryRes);
           } catch (err) {
             reject(err);
@@ -151,7 +154,7 @@ export async function apiRequest<T = any>(
     }
   }
 
-  let data: any = null;
+  let data: unknown = null;
   const contentType = response.headers.get('content-type');
   if (contentType && contentType.includes('application/json')) {
     data = await response.json();
@@ -160,13 +163,14 @@ export async function apiRequest<T = any>(
   }
 
   if (!response.ok) {
+    const errorData = data as { message?: string | string[]; error?: string } | null;
     const errorMessage =
-      (data && (data.message || data.error)) ||
+      (errorData && (errorData.message || errorData.error)) ||
       `Request failed with status ${response.status}`;
     throw new ApiError(
       Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage,
       response.status,
-      data,
+      data
     );
   }
 
@@ -174,26 +178,26 @@ export async function apiRequest<T = any>(
 }
 
 export const apiClient = {
-  get: <T = any>(endpoint: string, options?: RequestInit) =>
+  get: <T = unknown>(endpoint: string, options?: RequestInit) =>
     apiRequest<T>(endpoint, { ...options, method: 'GET' }),
-  post: <T = any>(endpoint: string, body?: any, options?: RequestInit) =>
+  post: <T = unknown>(endpoint: string, body?: unknown, options?: RequestInit) =>
     apiRequest<T>(endpoint, {
       ...options,
       method: 'POST',
       body: body ? JSON.stringify(body) : undefined,
     }),
-  patch: <T = any>(endpoint: string, body?: any, options?: RequestInit) =>
+  patch: <T = unknown>(endpoint: string, body?: unknown, options?: RequestInit) =>
     apiRequest<T>(endpoint, {
       ...options,
       method: 'PATCH',
       body: body ? JSON.stringify(body) : undefined,
     }),
-  put: <T = any>(endpoint: string, body?: any, options?: RequestInit) =>
+  put: <T = unknown>(endpoint: string, body?: unknown, options?: RequestInit) =>
     apiRequest<T>(endpoint, {
       ...options,
       method: 'PUT',
       body: body ? JSON.stringify(body) : undefined,
     }),
-  delete: <T = any>(endpoint: string, options?: RequestInit) =>
+  delete: <T = unknown>(endpoint: string, options?: RequestInit) =>
     apiRequest<T>(endpoint, { ...options, method: 'DELETE' }),
 };

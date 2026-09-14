@@ -404,9 +404,7 @@ describe('Phase 3 Core REST API - Versioned /api/v1 (e2e)', () => {
     });
 
     it('GET /api/v1/users/me - 401 when token is missing', async () => {
-      await request(app.getHttpServer())
-        .get('/api/v1/users/me')
-        .expect(401);
+      await request(app.getHttpServer()).get('/api/v1/users/me').expect(401);
     });
 
     it('GET /api/v1/users/me - retrieve authenticated profile with Bearer token', async () => {

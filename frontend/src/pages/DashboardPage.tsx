@@ -87,7 +87,7 @@ export const DashboardPage: React.FC = () => {
     const success = await refreshSession();
     if (success) {
       setRefreshMessage(
-        `Session refreshed successfully at ${new Date().toLocaleTimeString()} (rotated access & refresh tokens).`,
+        `Session refreshed successfully at ${new Date().toLocaleTimeString()} (rotated access & refresh tokens).`
       );
       queryClient.invalidateQueries({ queryKey: ['user-profile'] });
     } else {
@@ -114,8 +114,12 @@ export const DashboardPage: React.FC = () => {
                   className="h-16 w-16 rounded-2xl object-cover ring-2 ring-primary/20"
                 />
               ) : (
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground font-bold text-2xl shadow-md">
-                  {currentUser?.name ? currentUser.name[0].toUpperCase() : <UserIcon className="h-8 w-8" />}
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-2xl font-bold text-primary-foreground shadow-md">
+                  {currentUser?.name ? (
+                    currentUser.name[0].toUpperCase()
+                  ) : (
+                    <UserIcon className="h-8 w-8" />
+                  )}
                 </div>
               )}
               <div>
@@ -123,7 +127,7 @@ export const DashboardPage: React.FC = () => {
                   <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
                     {currentUser?.name || currentUser?.email.split('@')[0]}
                   </h1>
-                  <span className="rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-bold text-primary uppercase">
+                  <span className="rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-bold uppercase text-primary">
                     {currentUser?.level}
                   </span>
                 </div>
@@ -148,11 +152,12 @@ export const DashboardPage: React.FC = () => {
                 <Flame className="h-5 w-5" />
               </div>
               <div>
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                   Streak
                 </span>
                 <p className="text-2xl font-extrabold">
-                  {currentUser?.profile?.streakDays ?? 0} <span className="text-sm font-normal text-muted-foreground">days</span>
+                  {currentUser?.profile?.streakDays ?? 0}{' '}
+                  <span className="text-sm font-normal text-muted-foreground">days</span>
                 </p>
               </div>
             </div>
@@ -164,11 +169,14 @@ export const DashboardPage: React.FC = () => {
                 <Clock className="h-5 w-5" />
               </div>
               <div>
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                   Daily Goal
                 </span>
                 <p className="text-2xl font-extrabold">
-                  {currentUser?.profile?.dailyGoalMinutes ?? 15} <span className="text-sm font-normal text-muted-foreground">mins/day</span>
+                  {currentUser?.profile?.dailyGoalMinutes ?? 15}{' '}
+                  <span className="text-sm font-normal text-muted-foreground">
+                    mins/day
+                  </span>
                 </p>
               </div>
             </div>
@@ -180,11 +188,12 @@ export const DashboardPage: React.FC = () => {
                 <Award className="h-5 w-5" />
               </div>
               <div>
-                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                   Total XP
                 </span>
                 <p className="text-2xl font-extrabold">
-                  {currentUser?.profile?.totalXp ?? 0} <span className="text-sm font-normal text-muted-foreground">XP</span>
+                  {currentUser?.profile?.totalXp ?? 0}{' '}
+                  <span className="text-sm font-normal text-muted-foreground">XP</span>
                 </p>
               </div>
             </div>
@@ -196,8 +205,9 @@ export const DashboardPage: React.FC = () => {
           {/* Edit Profile Form */}
           <div className="rounded-2xl border bg-card p-6 shadow-sm lg:col-span-2">
             <h2 className="text-lg font-bold">Learning Preferences</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Update your target level and study time (stored in PostgreSQL via PATCH /api/users/me)
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Update your target level and study time (stored in PostgreSQL via PATCH
+              /api/users/me)
             </p>
 
             {updateSuccess && (
@@ -317,14 +327,14 @@ export const DashboardPage: React.FC = () => {
           <div className="space-y-6">
             <div className="rounded-2xl border bg-card p-6 shadow-sm">
               <h2 className="text-base font-bold">Authentication Session</h2>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Verify JWT access token rotation using your secure refresh token.
               </p>
 
               {refreshMessage && (
                 <div
                   id="refresh-session-status"
-                  className="mt-4 rounded-xl border border-primary/20 bg-primary/10 p-3 text-xs text-primary font-medium"
+                  className="mt-4 rounded-xl border border-primary/20 bg-primary/10 p-3 text-xs font-medium text-primary"
                 >
                   {refreshMessage}
                 </div>
@@ -335,24 +345,27 @@ export const DashboardPage: React.FC = () => {
                 type="button"
                 onClick={handleManualRefresh}
                 disabled={isRefreshing}
-                className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-input bg-background py-2 text-xs font-semibold hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-50"
+                className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-input bg-background py-2 text-xs font-semibold transition-all hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
               >
-                <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <RefreshCw
+                  className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin' : ''}`}
+                />
                 {isRefreshing ? 'Refreshing Token...' : 'Test Session Refresh'}
               </button>
             </div>
 
             <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-6 shadow-sm">
               <h2 className="text-base font-bold text-destructive">Sign Out</h2>
-              <p className="text-xs text-muted-foreground mt-1">
-                Revokes your refresh token on the NestJS backend and clears stored credentials.
+              <p className="mt-1 text-xs text-muted-foreground">
+                Revokes your refresh token on the NestJS backend and clears stored
+                credentials.
               </p>
 
               <button
                 id="dashboard-logout-button"
                 type="button"
                 onClick={logout}
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-destructive py-2 text-xs font-semibold text-destructive-foreground shadow-sm hover:bg-destructive/90 transition-all"
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-destructive py-2 text-xs font-semibold text-destructive-foreground shadow-sm transition-all hover:bg-destructive/90"
               >
                 <LogOut className="h-3.5 w-3.5" />
                 Sign Out

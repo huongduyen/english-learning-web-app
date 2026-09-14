@@ -331,45 +331,100 @@ describe('Phase 3 Core REST API - Versioned /api/v1 (e2e)', () => {
   });
 
   describe('Auth & Users Endpoints (/api/v1/auth, /api/v1/users)', () => {
-    it('POST /api/v1/auth/login - authenticate user', async () => {
-      const res = await request(app.getHttpServer())
-        .post('/api/v1/auth/login')
-        .send({ email: 'learner@example.com' })
-        .expect(200);
+    let authAccessToken: string;
+    let authRefreshToken: string;
+    const testRegisterEmail = `newlearner_${Date.now()}@example.com`;
 
-      expect(res.body).toHaveProperty('token');
-      expect(res.body).toHaveProperty('user');
-      expect(res.body.user.email).toBe('learner@example.com');
-    });
-
-    it('POST /api/v1/auth/register - create new user', async () => {
-      const testEmail = `newlearner_${Date.now()}@example.com`;
+    it('POST /api/v1/auth/register - create new user with hashed password', async () => {
       const res = await request(app.getHttpServer())
         .post('/api/v1/auth/register')
         .send({
-          email: testEmail,
+          email: testRegisterEmail,
+          password: 'Password123!',
           name: 'New Test Learner',
           level: 'BEGINNER',
           targetLevel: 'INTERMEDIATE',
         })
         .expect(201);
 
+      expect(res.body).toHaveProperty('accessToken');
+      expect(res.body).toHaveProperty('refreshToken');
       expect(res.body).toHaveProperty('token');
-      expect(res.body.user.email).toBe(testEmail);
+      expect(res.body).toHaveProperty('user');
+      expect(res.body.user.email).toBe(testRegisterEmail);
+      expect(res.body.user.password).toBeUndefined();
+      expect(res.body.user.hashedRefreshToken).toBeUndefined();
     });
 
-    it('GET /api/v1/users/profile - get current user profile', async () => {
+    it('POST /api/v1/auth/register - prevent duplicate email registration', async () => {
       const res = await request(app.getHttpServer())
-        .get('/api/v1/users/profile')
+        .post('/api/v1/auth/register')
+        .send({
+          email: testRegisterEmail,
+          password: 'Password123!',
+          name: 'Duplicate Learner',
+        })
+        .expect(409);
+
+      expect(res.body.statusCode).toBe(409);
+      expect(res.body.message).toContain('already exists');
+    });
+
+    it('POST /api/v1/auth/login - reject invalid password', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/api/v1/auth/login')
+        .send({
+          email: 'learner@example.com',
+          password: 'WrongPassword!',
+        })
+        .expect(401);
+
+      expect(res.body.statusCode).toBe(401);
+    });
+
+    it('POST /api/v1/auth/login - authenticate user and return token pair', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/api/v1/auth/login')
+        .send({
+          email: 'learner@example.com',
+          password: 'Learner123!',
+        })
         .expect(200);
 
-      expect(res.body).toHaveProperty('email');
-      expect(res.body).toHaveProperty('profile');
+      expect(res.body).toHaveProperty('accessToken');
+      expect(res.body).toHaveProperty('refreshToken');
+      expect(res.body).toHaveProperty('token');
+      expect(res.body).toHaveProperty('user');
+      expect(res.body.user.email).toBe('learner@example.com');
+      expect(res.body.user.password).toBeUndefined();
+      expect(res.body.user.hashedRefreshToken).toBeUndefined();
+
+      authAccessToken = res.body.accessToken;
+      authRefreshToken = res.body.refreshToken;
     });
 
-    it('PATCH /api/v1/users/profile - update user preferences', async () => {
+    it('GET /api/v1/users/me - 401 when token is missing', async () => {
+      await request(app.getHttpServer())
+        .get('/api/v1/users/me')
+        .expect(401);
+    });
+
+    it('GET /api/v1/users/me - retrieve authenticated profile with Bearer token', async () => {
       const res = await request(app.getHttpServer())
-        .patch('/api/v1/users/profile')
+        .get('/api/v1/users/me')
+        .set('Authorization', `Bearer ${authAccessToken}`)
+        .expect(200);
+
+      expect(res.body).toHaveProperty('email', 'learner@example.com');
+      expect(res.body).toHaveProperty('profile');
+      expect(res.body.password).toBeUndefined();
+      expect(res.body.hashedRefreshToken).toBeUndefined();
+    });
+
+    it('PATCH /api/v1/users/me - update profile with Bearer token', async () => {
+      const res = await request(app.getHttpServer())
+        .patch('/api/v1/users/me')
+        .set('Authorization', `Bearer ${authAccessToken}`)
         .send({
           dailyGoalMinutes: 25,
           nativeLanguage: 'vi',
@@ -377,6 +432,53 @@ describe('Phase 3 Core REST API - Versioned /api/v1 (e2e)', () => {
         .expect(200);
 
       expect(res.body.profile.dailyGoalMinutes).toBe(25);
+      expect(res.body.profile.nativeLanguage).toBe('vi');
+    });
+
+    it('GET /api/v1/users/profile - backward-compatible profile alias', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/api/v1/users/profile')
+        .set('Authorization', `Bearer ${authAccessToken}`)
+        .expect(200);
+
+      expect(res.body).toHaveProperty('email', 'learner@example.com');
+    });
+
+    it('POST /api/v1/auth/refresh - refresh access token using valid refresh token', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/api/v1/auth/refresh')
+        .send({ refreshToken: authRefreshToken })
+        .expect(200);
+
+      expect(res.body).toHaveProperty('accessToken');
+      expect(res.body).toHaveProperty('refreshToken');
+      expect(res.body.accessToken).toBeDefined();
+
+      authAccessToken = res.body.accessToken;
+      authRefreshToken = res.body.refreshToken;
+    });
+
+    it('POST /api/v1/auth/refresh - 401 with invalid refresh token', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/auth/refresh')
+        .send({ refreshToken: 'invalid.token.here' })
+        .expect(401);
+    });
+
+    it('POST /api/v1/auth/logout - invalidate refresh token', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/api/v1/auth/logout')
+        .set('Authorization', `Bearer ${authAccessToken}`)
+        .expect(200);
+
+      expect(res.body).toHaveProperty('success', true);
+    });
+
+    it('POST /api/v1/auth/refresh - 401 after logout when session was invalidated', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/auth/refresh')
+        .send({ refreshToken: authRefreshToken })
+        .expect(401);
     });
   });
 

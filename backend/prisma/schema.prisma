@@ -75,6 +75,8 @@ model User {
   avatar             String?
   role               UserRole           @default(LEARNER)
   level              EnglishLevel       @default(BEGINNER)
+  password           String
+  hashedRefreshToken String?
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
 

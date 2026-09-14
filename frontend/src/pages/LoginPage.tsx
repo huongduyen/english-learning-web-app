@@ -13,7 +13,9 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = (location.state as any)?.from?.pathname || '/dashboard';
+  const from =
+    (location.state as { from?: { pathname?: string } } | null)?.from?.pathname ||
+    '/dashboard';
 
   const {
     register,
@@ -86,8 +88,10 @@ export const LoginPage: React.FC = () => {
                     autoComplete="email"
                     placeholder="learner@example.com"
                     {...register('email')}
-                    className={`block w-full rounded-xl border bg-background/50 pl-10 pr-3.5 py-2.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
-                      errors.email ? 'border-destructive focus:ring-destructive/20' : 'border-input'
+                    className={`block w-full rounded-xl border bg-background/50 py-2.5 pl-10 pr-3.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                      errors.email
+                        ? 'border-destructive focus:ring-destructive/20'
+                        : 'border-input'
                     }`}
                   />
                 </div>
@@ -113,7 +117,7 @@ export const LoginPage: React.FC = () => {
                     autoComplete="current-password"
                     placeholder="••••••••"
                     {...register('password')}
-                    className={`block w-full rounded-xl border bg-background/50 pl-10 pr-10 py-2.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                    className={`block w-full rounded-xl border bg-background/50 py-2.5 pl-10 pr-10 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
                       errors.password
                         ? 'border-destructive focus:ring-destructive/20'
                         : 'border-input'
@@ -125,11 +129,17 @@ export const LoginPage: React.FC = () => {
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                     className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="mt-1 text-xs text-destructive">{errors.password.message}</p>
+                  <p className="mt-1 text-xs text-destructive">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
 

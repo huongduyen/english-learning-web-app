@@ -58,9 +58,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         isLoading: false,
         error: null,
       });
-    } catch (err: any) {
+    } catch (err) {
       const errorMessage =
-        err instanceof ApiError ? err.message : err?.message || 'Login failed';
+        err instanceof ApiError
+          ? err.message
+          : err instanceof Error
+            ? err.message
+            : 'Login failed';
       set({ isLoading: false, error: errorMessage });
       throw err;
     }
@@ -87,11 +91,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         isLoading: false,
         error: null,
       });
-    } catch (err: any) {
+    } catch (err) {
       const errorMessage =
         err instanceof ApiError
           ? err.message
-          : err?.message || 'Registration failed';
+          : err instanceof Error
+            ? err.message
+            : 'Registration failed';
       set({ isLoading: false, error: errorMessage });
       throw err;
     }

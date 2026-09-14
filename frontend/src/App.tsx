@@ -7,14 +7,7 @@ import { PublicOnlyRoute } from './components/PublicOnlyRoute';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
-import {
-  CheckCircle2,
-  Server,
-  Globe,
-  Database,
-  Shield,
-  ArrowRight,
-} from 'lucide-react';
+import { CheckCircle2, Server, Globe, Database, Shield, ArrowRight } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
@@ -45,7 +38,8 @@ export const HomePage: React.FC = () => {
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
             A secure, full-stack learning platform featuring token-based authentication,
-            bcrypt password hashing, refresh token rotation, and personalized study profiles.
+            bcrypt password hashing, refresh token rotation, and personalized study
+            profiles.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -53,7 +47,7 @@ export const HomePage: React.FC = () => {
               <Link
                 to="/dashboard"
                 id="hero-dashboard-button"
-                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90"
               >
                 Go to Dashboard
                 <ArrowRight className="h-4 w-4" />
@@ -63,7 +57,7 @@ export const HomePage: React.FC = () => {
                 <Link
                   to="/register"
                   id="hero-register-button"
-                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90"
                 >
                   Get Started Free
                   <ArrowRight className="h-4 w-4" />
@@ -71,7 +65,7 @@ export const HomePage: React.FC = () => {
                 <Link
                   to="/login"
                   id="hero-login-button"
-                  className="inline-flex items-center gap-2 rounded-xl border border-input bg-card px-6 py-3 text-sm font-semibold text-foreground hover:bg-accent transition-all"
+                  className="inline-flex items-center gap-2 rounded-xl border border-input bg-card px-6 py-3 text-sm font-semibold text-foreground transition-all hover:bg-accent"
                 >
                   Sign In
                 </Link>
@@ -86,10 +80,11 @@ export const HomePage: React.FC = () => {
               <div className="rounded-lg bg-blue-500/10 p-2.5 text-blue-600 dark:text-blue-400">
                 <Globe className="h-5 w-5" />
               </div>
-              <h2 className="font-semibold text-base">Frontend Architecture</h2>
+              <h2 className="text-base font-semibold">Frontend Architecture</h2>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
-              React 18 with Vite, React Hook Form, Zod schemas, TanStack Query, and persistent Zustand store.
+              React 18 with Vite, React Hook Form, Zod schemas, TanStack Query, and
+              persistent Zustand store.
             </p>
           </div>
 
@@ -98,10 +93,11 @@ export const HomePage: React.FC = () => {
               <div className="rounded-lg bg-emerald-500/10 p-2.5 text-emerald-600 dark:text-emerald-400">
                 <Server className="h-5 w-5" />
               </div>
-              <h2 className="font-semibold text-base">NestJS REST API</h2>
+              <h2 className="text-base font-semibold">NestJS REST API</h2>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
-              Modular controllers and services with global validation pipes, exception filters, and OpenAPI Swagger documentation.
+              Modular controllers and services with global validation pipes, exception
+              filters, and OpenAPI Swagger documentation.
             </p>
           </div>
 
@@ -110,10 +106,11 @@ export const HomePage: React.FC = () => {
               <div className="rounded-lg bg-indigo-500/10 p-2.5 text-indigo-600 dark:text-indigo-400">
                 <Shield className="h-5 w-5" />
               </div>
-              <h2 className="font-semibold text-base">JWT Security</h2>
+              <h2 className="text-base font-semibold">JWT Security</h2>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
-              Access tokens (15m) paired with bcrypt-hashed refresh tokens (7d), NestJS guards, and auto-refresh replay interceptors.
+              Access tokens (15m) paired with bcrypt-hashed refresh tokens (7d), NestJS
+              guards, and auto-refresh replay interceptors.
             </p>
           </div>
 
@@ -122,10 +119,11 @@ export const HomePage: React.FC = () => {
               <div className="rounded-lg bg-amber-500/10 p-2.5 text-amber-600 dark:text-amber-400">
                 <Database className="h-5 w-5" />
               </div>
-              <h2 className="font-semibold text-base">PostgreSQL & Prisma</h2>
+              <h2 className="text-base font-semibold">PostgreSQL & Prisma</h2>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
-              PostgreSQL relational database with Prisma ORM migrations, relational profiles, and seeded English lessons.
+              PostgreSQL relational database with Prisma ORM migrations, relational
+              profiles, and seeded English lessons.
             </p>
           </div>
         </section>
@@ -138,8 +136,10 @@ export const HomePage: React.FC = () => {
                 key={item.name}
                 className="flex flex-col rounded-lg border bg-background/50 p-3"
               >
-                <span className="text-xs font-medium text-muted-foreground">{item.category}</span>
-                <span className="mt-1 font-semibold text-sm">{item.name}</span>
+                <span className="text-xs font-medium text-muted-foreground">
+                  {item.category}
+                </span>
+                <span className="mt-1 text-sm font-semibold">{item.name}</span>
               </div>
             ))}
           </div>
@@ -147,7 +147,8 @@ export const HomePage: React.FC = () => {
       </main>
 
       <footer className="border-t py-6 text-center text-sm text-muted-foreground">
-        English Learning Web Application &copy; {new Date().getFullYear()} &middot; Built with modern TypeScript stack
+        English Learning Web Application &copy; {new Date().getFullYear()} &middot; Built
+        with modern TypeScript stack
       </footer>
     </div>
   );
@@ -200,7 +201,9 @@ export const App: React.FC = () => {
         element={
           <div className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
             <h1 className="text-3xl font-bold">404 - Not Found</h1>
-            <p className="mt-2 text-muted-foreground">The requested page does not exist.</p>
+            <p className="mt-2 text-muted-foreground">
+              The requested page does not exist.
+            </p>
             <Link to="/" className="mt-4 text-primary underline">
               Return Home
             </Link>

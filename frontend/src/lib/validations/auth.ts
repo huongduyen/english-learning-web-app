@@ -31,13 +31,7 @@ export const evaluatePassword = (password: string): PasswordValidationResult => 
   const hasNumber = /[0-9]/.test(password);
   const hasSpecialChar = /[@$!%*?&^#_()\-+=<>.,]/.test(password);
 
-  const criteria = [
-    hasMinLength,
-    hasUppercase,
-    hasLowercase,
-    hasNumber,
-    hasSpecialChar,
-  ];
+  const criteria = [hasMinLength, hasUppercase, hasLowercase, hasNumber, hasSpecialChar];
   const score = criteria.filter(Boolean).length;
   const isValid = score === 5;
 
@@ -54,10 +48,7 @@ export const evaluatePassword = (password: string): PasswordValidationResult => 
 
 export const registerSchema = z
   .object({
-    name: z
-      .string()
-      .trim()
-      .min(2, 'Name must be at least 2 characters long'),
+    name: z.string().trim().min(2, 'Name must be at least 2 characters long'),
     email: z
       .string()
       .trim()
@@ -71,11 +62,9 @@ export const registerSchema = z
       .regex(/[0-9]/, 'Must contain at least 1 number (0-9)')
       .regex(
         /[@$!%*?&^#_()\-+=<>.,]/,
-        'Must contain at least 1 special character (!@#$%^&*)',
+        'Must contain at least 1 special character (!@#$%^&*)'
       ),
-    confirmPassword: z
-      .string()
-      .min(1, 'Please confirm your password'),
+    confirmPassword: z.string().min(1, 'Please confirm your password'),
     level: z.enum([
       'BEGINNER',
       'ELEMENTARY',

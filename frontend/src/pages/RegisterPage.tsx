@@ -111,7 +111,8 @@ export const RegisterPage: React.FC = () => {
   };
 
   const getStrengthLabel = (score: number) => {
-    if (score <= 1) return { text: 'Very Weak', color: 'bg-destructive text-destructive' };
+    if (score <= 1)
+      return { text: 'Very Weak', color: 'bg-destructive text-destructive' };
     if (score <= 2) return { text: 'Weak', color: 'bg-destructive/80 text-destructive' };
     if (score === 3) return { text: 'Moderate', color: 'bg-amber-500 text-amber-500' };
     if (score === 4) return { text: 'Good', color: 'bg-blue-500 text-blue-500' };
@@ -127,9 +128,12 @@ export const RegisterPage: React.FC = () => {
       <main className="flex flex-1 items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-xl space-y-6">
           <div className="text-center">
-            <h1 className="text-3xl font-extrabold tracking-tight">Create Your Account</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight">
+              Create Your Account
+            </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Begin your personalized English learning path with interactive quizzes and vocabulary tools
+              Begin your personalized English learning path with interactive quizzes and
+              vocabulary tools
             </p>
           </div>
 
@@ -162,8 +166,10 @@ export const RegisterPage: React.FC = () => {
                     autoComplete="name"
                     placeholder="Jane Doe"
                     {...register('name')}
-                    className={`block w-full rounded-xl border bg-background/50 pl-10 pr-3.5 py-2.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
-                      errors.name ? 'border-destructive focus:ring-destructive/20' : 'border-input'
+                    className={`block w-full rounded-xl border bg-background/50 py-2.5 pl-10 pr-3.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                      errors.name
+                        ? 'border-destructive focus:ring-destructive/20'
+                        : 'border-input'
                     }`}
                   />
                 </div>
@@ -189,8 +195,10 @@ export const RegisterPage: React.FC = () => {
                     autoComplete="email"
                     placeholder="learner@example.com"
                     {...register('email')}
-                    className={`block w-full rounded-xl border bg-background/50 pl-10 pr-3.5 py-2.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
-                      errors.email ? 'border-destructive focus:ring-destructive/20' : 'border-input'
+                    className={`block w-full rounded-xl border bg-background/50 py-2.5 pl-10 pr-3.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                      errors.email
+                        ? 'border-destructive focus:ring-destructive/20'
+                        : 'border-input'
                     }`}
                   />
                 </div>
@@ -217,7 +225,7 @@ export const RegisterPage: React.FC = () => {
                       autoComplete="new-password"
                       placeholder="••••••••"
                       {...register('password')}
-                      className={`block w-full rounded-xl border bg-background/50 pl-10 pr-10 py-2.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                      className={`block w-full rounded-xl border bg-background/50 py-2.5 pl-10 pr-10 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
                         errors.password
                           ? 'border-destructive focus:ring-destructive/20'
                           : 'border-input'
@@ -229,7 +237,11 @@ export const RegisterPage: React.FC = () => {
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
                       className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
                     >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -251,7 +263,7 @@ export const RegisterPage: React.FC = () => {
                       autoComplete="new-password"
                       placeholder="••••••••"
                       {...register('confirmPassword')}
-                      className={`block w-full rounded-xl border bg-background/50 pl-10 pr-10 py-2.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                      className={`block w-full rounded-xl border bg-background/50 py-2.5 pl-10 pr-10 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 ${
                         errors.confirmPassword
                           ? 'border-destructive focus:ring-destructive/20'
                           : 'border-input'
@@ -304,16 +316,14 @@ export const RegisterPage: React.FC = () => {
               {passwordValue.length > 0 && (
                 <div
                   id="password-validation-box"
-                  className="rounded-xl border border-border/80 bg-background/60 p-3.5 shadow-sm space-y-3"
+                  className="space-y-3 rounded-xl border border-border/80 bg-background/60 p-3.5 shadow-sm"
                 >
                   {/* Password Strength Meter */}
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                       Password Strength
                     </span>
-                    <span className="text-xs font-bold capitalize">
-                      {strength.text}
-                    </span>
+                    <span className="text-xs font-bold capitalize">{strength.text}</span>
                   </div>
 
                   <div className="grid grid-cols-5 gap-1.5">
@@ -321,7 +331,9 @@ export const RegisterPage: React.FC = () => {
                       <div
                         key={level}
                         className={`h-1.5 rounded-full transition-all duration-300 ${
-                          passwordStats.score >= level ? strength.color.split(' ')[0] : 'bg-muted'
+                          passwordStats.score >= level
+                            ? strength.color.split(' ')[0]
+                            : 'bg-muted'
                         }`}
                       />
                     ))}
@@ -333,11 +345,14 @@ export const RegisterPage: React.FC = () => {
                       id="password-warning-notification"
                       className="flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 p-2.5 text-xs text-amber-700 dark:text-amber-400"
                     >
-                      <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-amber-500" />
+                      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
                       <div>
-                        <span className="font-semibold">Password requirements needed:</span>
+                        <span className="font-semibold">
+                          Password requirements needed:
+                        </span>
                         <p className="mt-0.5 text-[11px] opacity-90">
-                          Please fulfill all 5 security requirements below before registering.
+                          Please fulfill all 5 security requirements below before
+                          registering.
                         </p>
                       </div>
                     </div>
@@ -352,18 +367,18 @@ export const RegisterPage: React.FC = () => {
                   )}
 
                   {/* Live Criteria Checklist */}
-                  <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 pt-1">
+                  <div className="grid grid-cols-1 gap-1.5 pt-1 sm:grid-cols-2">
                     <div
                       className={`flex items-center gap-2 text-xs transition-colors ${
                         passwordStats.hasMinLength
-                          ? 'text-emerald-600 dark:text-emerald-400 font-medium'
+                          ? 'font-medium text-emerald-600 dark:text-emerald-400'
                           : 'text-muted-foreground'
                       }`}
                     >
                       {passwordStats.hasMinLength ? (
-                        <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                        <Check className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
                       ) : (
-                        <X className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" />
+                        <X className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
                       )}
                       <span>At least 8 characters</span>
                     </div>
@@ -371,14 +386,14 @@ export const RegisterPage: React.FC = () => {
                     <div
                       className={`flex items-center gap-2 text-xs transition-colors ${
                         passwordStats.hasUppercase
-                          ? 'text-emerald-600 dark:text-emerald-400 font-medium'
+                          ? 'font-medium text-emerald-600 dark:text-emerald-400'
                           : 'text-muted-foreground'
                       }`}
                     >
                       {passwordStats.hasUppercase ? (
-                        <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                        <Check className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
                       ) : (
-                        <X className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" />
+                        <X className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
                       )}
                       <span>One uppercase letter (A-Z)</span>
                     </div>
@@ -386,14 +401,14 @@ export const RegisterPage: React.FC = () => {
                     <div
                       className={`flex items-center gap-2 text-xs transition-colors ${
                         passwordStats.hasLowercase
-                          ? 'text-emerald-600 dark:text-emerald-400 font-medium'
+                          ? 'font-medium text-emerald-600 dark:text-emerald-400'
                           : 'text-muted-foreground'
                       }`}
                     >
                       {passwordStats.hasLowercase ? (
-                        <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                        <Check className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
                       ) : (
-                        <X className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" />
+                        <X className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
                       )}
                       <span>One lowercase letter (a-z)</span>
                     </div>
@@ -401,14 +416,14 @@ export const RegisterPage: React.FC = () => {
                     <div
                       className={`flex items-center gap-2 text-xs transition-colors ${
                         passwordStats.hasNumber
-                          ? 'text-emerald-600 dark:text-emerald-400 font-medium'
+                          ? 'font-medium text-emerald-600 dark:text-emerald-400'
                           : 'text-muted-foreground'
                       }`}
                     >
                       {passwordStats.hasNumber ? (
-                        <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                        <Check className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
                       ) : (
-                        <X className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" />
+                        <X className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
                       )}
                       <span>One number (0-9)</span>
                     </div>
@@ -416,14 +431,14 @@ export const RegisterPage: React.FC = () => {
                     <div
                       className={`flex items-center gap-2 text-xs transition-colors sm:col-span-2 ${
                         passwordStats.hasSpecialChar
-                          ? 'text-emerald-600 dark:text-emerald-400 font-medium'
+                          ? 'font-medium text-emerald-600 dark:text-emerald-400'
                           : 'text-muted-foreground'
                       }`}
                     >
                       {passwordStats.hasSpecialChar ? (
-                        <Check className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                        <Check className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
                       ) : (
-                        <X className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" />
+                        <X className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
                       )}
                       <span>One special character (!@#$%^&*)</span>
                     </div>
@@ -436,7 +451,7 @@ export const RegisterPage: React.FC = () => {
               )}
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Select Starting English Level
                 </label>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -446,7 +461,9 @@ export const RegisterPage: React.FC = () => {
                       <button
                         key={lvl.value}
                         type="button"
-                        onClick={() => setValue('level', lvl.value, { shouldValidate: true })}
+                        onClick={() =>
+                          setValue('level', lvl.value, { shouldValidate: true })
+                        }
                         className={`flex flex-col rounded-xl border p-3 text-left transition-all ${
                           isSelected
                             ? 'border-primary bg-primary/10 shadow-sm ring-1 ring-primary'
@@ -456,7 +473,7 @@ export const RegisterPage: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold">{lvl.label}</span>
                           <span
-                            className={`rounded px-1.5 py-0.2 text-[10px] font-bold ${
+                            className={`py-0.2 rounded px-1.5 text-[10px] font-bold ${
                               isSelected
                                 ? 'bg-primary text-primary-foreground'
                                 : 'bg-muted text-muted-foreground'

@@ -37,7 +37,9 @@ export class UsersController {
   }
 
   @Patch('profile')
-  @ApiOperation({ summary: 'Alias for update current user profile and learning settings' })
+  @ApiOperation({
+    summary: 'Alias for update current user profile and learning settings',
+  })
   @ApiResponse({ status: 200, description: 'Updated profile data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async updateProfile(@Body() dto: UpdateProfileDto, @CurrentUser() userId: string) {

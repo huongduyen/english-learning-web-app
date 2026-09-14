@@ -14,8 +14,26 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors({
-    origin: corsOrigin.split(','),
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+
+      // Allow any localhost port during development (5173, 5174, etc.) or 127.0.0.1
+      if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+        return callback(null, true);
+      }
+
+      // Check against configured CORS_ORIGIN list
+      const allowedOrigins = corsOrigin.split(',').map((o) => o.trim());
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-user-id'],
   });
 
   // Rewrite unversioned /api/* -> /api/v1/* (except swagger /api/docs)

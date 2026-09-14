@@ -8,6 +8,7 @@ import {
   QuestionType,
   MessageRole,
 } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -41,9 +42,15 @@ async function main() {
   // 2. Seed Users & UserProfiles
   // ==============================================
   console.log('Seeding users...');
+  const defaultPasswordHash = bcrypt.hashSync('Learner123!', 10);
+  const teacherPasswordHash = bcrypt.hashSync('Teacher123!', 10);
+  const adminPasswordHash = bcrypt.hashSync('Admin123!', 10);
+
   const learner = await prisma.user.create({
     data: {
+      id: 'cb9c0c5b-9aaa-4501-84f4-9a617c7feef3',
       email: 'learner@example.com',
+      password: defaultPasswordHash,
       name: 'Nguyễn Văn Nam',
       avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&h=200&q=80',
       role: UserRole.LEARNER,
@@ -63,6 +70,7 @@ async function main() {
   const teacher = await prisma.user.create({
     data: {
       email: 'teacher@example.com',
+      password: teacherPasswordHash,
       name: 'Cô Hương Duyên',
       avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&h=200&q=80',
       role: UserRole.TEACHER,
@@ -82,6 +90,7 @@ async function main() {
   const admin = await prisma.user.create({
     data: {
       email: 'admin@example.com',
+      password: adminPasswordHash,
       name: 'Quản trị viên',
       role: UserRole.ADMIN,
       level: EnglishLevel.ADVANCED,

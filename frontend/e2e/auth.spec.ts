@@ -27,9 +27,10 @@ test.describe('Authentication & Session Lifecycle Flow', () => {
     // 3. Verify redirected to protected dashboard
     await expect(page).toHaveURL(/\/dashboard/);
     await expect(page.getByRole('heading', { name: testName })).toBeVisible();
-    await expect(page.getByText('Session Active (JWT)')).toBeVisible();
 
-    // 4. Test Session Refresh (manual token rotation trigger)
+    // 4. Test Session Refresh & Profile Settings on /profile
+    await page.goto('/profile');
+    await expect(page.getByText('Session Active (JWT)')).toBeVisible();
     const refreshButton = page.locator('#refresh-session-button');
     await expect(refreshButton).toBeVisible();
     await refreshButton.click();

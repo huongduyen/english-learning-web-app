@@ -1,10 +1,20 @@
-import { Controller, Get, Patch, Param, Query, Body } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
+import { Controller, Get, Patch, Param, Query, Body, UseGuards } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { DailyGoalsService } from './daily-goals.service';
 import { UpdateDailyGoalDto } from './dto/update-daily-goal.dto';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { OptionalJwtAuthGuard } from '../../common/guards/optional-jwt-auth.guard';
 
 @ApiTags('Daily Goals')
+@ApiBearerAuth()
+@UseGuards(OptionalJwtAuthGuard)
 @Controller('daily-goals')
 export class DailyGoalsController {
   constructor(private readonly dailyGoalsService: DailyGoalsService) {}

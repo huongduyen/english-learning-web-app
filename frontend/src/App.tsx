@@ -7,6 +7,8 @@ import { PublicOnlyRoute } from './components/PublicOnlyRoute';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { ModulePlaceholderPage } from './pages/ModulePlaceholderPage';
 import { CheckCircle2, Server, Globe, Database, Shield, ArrowRight } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -192,7 +194,55 @@ export const App: React.FC = () => {
         path="/profile"
         element={
           <ProtectedRoute>
-            <DashboardPage />
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vocabulary"
+        element={
+          <ProtectedRoute>
+            <ModulePlaceholderPage
+              category="Vocabulary"
+              title="Vocabulary Topics & Flashcards"
+              description="Master high-frequency English words with spaced repetition, example sentences, and audio pronunciation."
+            />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/grammar"
+        element={
+          <ProtectedRoute>
+            <ModulePlaceholderPage
+              category="Grammar"
+              title="Grammar Lessons & Practice"
+              description="Strengthen your understanding of English tenses, sentence structures, and interactive exercises."
+            />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/listening"
+        element={
+          <ProtectedRoute>
+            <ModulePlaceholderPage
+              category="Listening"
+              title="Listening Comprehension"
+              description="Improve your audio listening skills with native accents, transcripts, and comprehension quizzes."
+            />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reading"
+        element={
+          <ProtectedRoute>
+            <ModulePlaceholderPage
+              category="Reading"
+              title="Reading Comprehension"
+              description="Explore engaging articles and stories curated for your English proficiency level."
+            />
           </ProtectedRoute>
         }
       />

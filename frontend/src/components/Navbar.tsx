@@ -50,13 +50,23 @@ export const Navbar: React.FC = () => {
               Home
             </Link>
             {isAuthenticated && (
-              <Link
-                to="/dashboard"
-                className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <LayoutDashboard className="h-4 w-4" />
-                Dashboard
-              </Link>
+              <>
+                <Link
+                  to="/dashboard"
+                  id="nav-dashboard-link"
+                  className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  Dashboard
+                </Link>
+                <Link
+                  to="/profile"
+                  id="nav-profile-link"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Profile
+                </Link>
+              </>
             )}
           </nav>
         </div>

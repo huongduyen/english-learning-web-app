@@ -1,6 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { QuestionBreakdown, QuizQuestion } from '../../types/quiz';
+import {
+  MatchingPair,
+  MultipleChoiceOption,
+  QuestionBreakdown,
+  QuizQuestion,
+} from '../../types/quiz';
 import { QuestionType } from '../../types/grammar';
+
+type OptionItem = MultipleChoiceOption | string;
 import {
   CheckCircle2,
   XCircle,
@@ -59,34 +66,35 @@ export const QuizReviewView: React.FC<Props> = ({
    */
   const resolveMultipleChoiceLabel = (
     value: string | null | undefined,
-    options: any
+    options: unknown
   ): { label: string; text: string; full: string } | null => {
     if (!value || !Array.isArray(options)) return null;
 
+    const optList = options as OptionItem[];
     const cleanVal = value.trim().toLowerCase();
     const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
 
     // Try match by id
-    const idxById = options.findIndex((opt: any) => {
+    const idxById = optList.findIndex((opt: OptionItem) => {
       const optId = typeof opt === 'string' ? opt : opt?.id;
       return String(optId).trim().toLowerCase() === cleanVal;
     });
 
     if (idxById !== -1) {
-      const opt = options[idxById];
+      const opt = optList[idxById];
       const text = typeof opt === 'string' ? opt : opt.text;
       const letter = letters[idxById] || String(idxById + 1);
       return { label: letter, text, full: `${letter}. ${text}` };
     }
 
     // Try match by text
-    const idxByText = options.findIndex((opt: any) => {
+    const idxByText = optList.findIndex((opt: OptionItem) => {
       const optText = typeof opt === 'string' ? opt : opt?.text;
       return String(optText).trim().toLowerCase() === cleanVal;
     });
 
     if (idxByText !== -1) {
-      const opt = options[idxByText];
+      const opt = optList[idxByText];
       const text = typeof opt === 'string' ? opt : opt.text;
       const letter = letters[idxByText] || String(idxByText + 1);
       return { label: letter, text, full: `${letter}. ${text}` };
@@ -94,8 +102,8 @@ export const QuizReviewView: React.FC<Props> = ({
 
     // Fallback if value is direct letter
     const letterIdx = ['a', 'b', 'c', 'd', 'e', 'f'].indexOf(cleanVal);
-    if (letterIdx !== -1 && options[letterIdx]) {
-      const opt = options[letterIdx];
+    if (letterIdx !== -1 && optList[letterIdx]) {
+      const opt = optList[letterIdx];
       const text = typeof opt === 'string' ? opt : opt.text;
       const letter = letters[letterIdx];
       return { label: letter, text, full: `${letter}. ${text}` };
@@ -109,12 +117,18 @@ export const QuizReviewView: React.FC<Props> = ({
    */
   const formatMatchingPairs = (
     pairString: string | null | undefined,
-    pairsMeta: any
+    pairsMeta: unknown
   ): Array<{ left: string; right: string }> => {
     if (!pairString) return [];
     const pairsList: Array<{ left: string; right: string }> = [];
 
-    const availablePairs = pairsMeta?.pairs || (Array.isArray(pairsMeta) ? pairsMeta : []);
+    const metaObj = pairsMeta as { pairs?: MatchingPair[] } | MatchingPair[] | null | undefined;
+    const availablePairs: MatchingPair[] =
+      (metaObj && 'pairs' in metaObj && Array.isArray(metaObj.pairs)
+        ? metaObj.pairs
+        : Array.isArray(metaObj)
+          ? metaObj
+          : []) || [];
     const items = pairString.split(',').map((p) => p.trim());
 
     items.forEach((item) => {
@@ -122,7 +136,7 @@ export const QuizReviewView: React.FC<Props> = ({
       if (parts.length === 2) {
         const [leftId, rightId] = parts;
         const matched = availablePairs.find(
-          (p: any) =>
+          (p: MatchingPair) =>
             String(p.leftId).toLowerCase() === leftId.toLowerCase() &&
             String(p.rightId).toLowerCase() === rightId.toLowerCase()
         );
@@ -132,10 +146,10 @@ export const QuizReviewView: React.FC<Props> = ({
         } else {
           // Look up left and right separately if user matched differently
           const leftObj = availablePairs.find(
-            (p: any) => String(p.leftId).toLowerCase() === leftId.toLowerCase()
+            (p: MatchingPair) => String(p.leftId).toLowerCase() === leftId.toLowerCase()
           );
           const rightObj = availablePairs.find(
-            (p: any) => String(p.rightId).toLowerCase() === rightId.toLowerCase()
+            (p: MatchingPair) => String(p.rightId).toLowerCase() === rightId.toLowerCase()
           );
           pairsList.push({
             left: leftObj?.left || `Item ${leftId}`,
@@ -316,7 +330,7 @@ export const QuizReviewView: React.FC<Props> = ({
                         Options & Results:
                       </span>
                       <div className="grid gap-2">
-                        {options.map((opt: any, optIdx: number) => {
+                        {(options as OptionItem[]).map((opt, optIdx: number) => {
                           const optId = typeof opt === 'string' ? opt : opt.id;
                           const optText = typeof opt === 'string' ? opt : opt.text;
                           const letters = ['A', 'B', 'C', 'D', 'E', 'F'];

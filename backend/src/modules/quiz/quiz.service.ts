@@ -138,23 +138,48 @@ export class QuizService {
       const submittedAnswer = answerMap.get(q.id);
       let isCorrect = false;
 
-      if (submittedAnswer !== undefined && submittedAnswer !== null && submittedAnswer !== '') {
+      if (
+        submittedAnswer !== undefined &&
+        submittedAnswer !== null &&
+        submittedAnswer !== ''
+      ) {
         const cleanSubmitted = submittedAnswer.trim();
         const cleanCorrect = q.correctAnswer.trim();
 
         if (q.questionType === 'SENTENCE_ORDERING') {
           // Normalize whitespace, casing, and trailing punctuation
-          const normSub = cleanSubmitted.toLowerCase().replace(/[.,!?;:]/g, '').replace(/\s+/g, ' ');
-          const normCorr = cleanCorrect.toLowerCase().replace(/[.,!?;:]/g, '').replace(/\s+/g, ' ');
+          const normSub = cleanSubmitted
+            .toLowerCase()
+            .replace(/[.,!?;:]/g, '')
+            .replace(/\s+/g, ' ');
+          const normCorr = cleanCorrect
+            .toLowerCase()
+            .replace(/[.,!?;:]/g, '')
+            .replace(/\s+/g, ' ');
           isCorrect = normSub === normCorr;
         } else if (q.questionType === 'MATCHING') {
           // Compare sorted pairs e.g. "1:a,2:b" vs "2:b,1:a"
-          const subPairs = cleanSubmitted.toLowerCase().split(',').map((s) => s.trim()).sort().join(',');
-          const corrPairs = cleanCorrect.toLowerCase().split(',').map((s) => s.trim()).sort().join(',');
+          const subPairs = cleanSubmitted
+            .toLowerCase()
+            .split(',')
+            .map((s) => s.trim())
+            .sort()
+            .join(',');
+          const corrPairs = cleanCorrect
+            .toLowerCase()
+            .split(',')
+            .map((s) => s.trim())
+            .sort()
+            .join(',');
           isCorrect = subPairs === corrPairs;
-        } else if (q.questionType === 'FILL_BLANK' || q.questionType === 'SENTENCE_CORRECTION') {
+        } else if (
+          q.questionType === 'FILL_BLANK' ||
+          q.questionType === 'SENTENCE_CORRECTION'
+        ) {
           // Support multiple acceptable alternatives separated by |
-          const alternatives = cleanCorrect.split(/\s*\|\s*/).map((s) => s.toLowerCase().trim());
+          const alternatives = cleanCorrect
+            .split(/\s*\|\s*/)
+            .map((s) => s.toLowerCase().trim());
           isCorrect = alternatives.includes(cleanSubmitted.toLowerCase());
         } else if (q.questionType === 'MULTIPLE_CHOICE') {
           // Check if matches option id or option text
@@ -164,9 +189,17 @@ export class QuizService {
           } else if (Array.isArray(q.options)) {
             const matchedOption = (q.options as any[]).find(
               (opt) =>
-                (opt.id && opt.id.toLowerCase() === cleanSubmitted.toLowerCase() && opt.id.toLowerCase() === cleanCorrect.toLowerCase()) ||
-                (opt.text && opt.text.toLowerCase() === cleanSubmitted.toLowerCase() && opt.id && opt.id.toLowerCase() === cleanCorrect.toLowerCase()) ||
-                (opt.id && opt.id.toLowerCase() === cleanSubmitted.toLowerCase() && opt.text && opt.text.toLowerCase() === cleanCorrect.toLowerCase()),
+                (opt.id &&
+                  opt.id.toLowerCase() === cleanSubmitted.toLowerCase() &&
+                  opt.id.toLowerCase() === cleanCorrect.toLowerCase()) ||
+                (opt.text &&
+                  opt.text.toLowerCase() === cleanSubmitted.toLowerCase() &&
+                  opt.id &&
+                  opt.id.toLowerCase() === cleanCorrect.toLowerCase()) ||
+                (opt.id &&
+                  opt.id.toLowerCase() === cleanSubmitted.toLowerCase() &&
+                  opt.text &&
+                  opt.text.toLowerCase() === cleanCorrect.toLowerCase()),
             );
             isCorrect = !!matchedOption;
           }

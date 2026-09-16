@@ -15,7 +15,10 @@ export class ExerciseAnswerDto {
 }
 
 export class SubmitGrammarExerciseDto {
-  @ApiProperty({ type: [ExerciseAnswerDto], description: 'List of submitted exercise answers' })
+  @ApiProperty({
+    type: [ExerciseAnswerDto],
+    description: 'List of submitted exercise answers',
+  })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ExerciseAnswerDto)

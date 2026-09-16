@@ -24,28 +24,32 @@ export const GRAMMAR_CATEGORIES: Array<{
     slug: 'basic-grammar',
     name: 'Basic Grammar',
     nameVi: 'Ngữ Pháp Căn Bản',
-    description: 'Word classes, sentence construction, adjectives, comparatives, and relative clauses.',
+    description:
+      'Word classes, sentence construction, adjectives, comparatives, and relative clauses.',
     icon: 'BookOpen',
   },
   {
     slug: 'tenses',
     name: 'Tenses',
     nameVi: 'Các Thì Trong Tiếng Anh',
-    description: 'Master present, past, future, continuous, and perfect tenses with timeline rules.',
+    description:
+      'Master present, past, future, continuous, and perfect tenses with timeline rules.',
     icon: 'Clock',
   },
   {
     slug: 'modal-verbs',
     name: 'Modal Verbs',
     nameVi: 'Động Từ Khuyết Thiếu',
-    description: 'Can, could, must, should, may, might, and have to for ability, obligations, and advice.',
+    description:
+      'Can, could, must, should, may, might, and have to for ability, obligations, and advice.',
     icon: 'Sparkles',
   },
   {
     slug: 'articles',
     name: 'Articles',
     nameVi: 'Mạo Từ (A, An, The)',
-    description: 'Definite, indefinite, and zero articles with countability distinctions.',
+    description:
+      'Definite, indefinite, and zero articles with countability distinctions.',
     icon: 'FileText',
   },
   {
@@ -59,21 +63,24 @@ export const GRAMMAR_CATEGORIES: Array<{
     slug: 'conditionals',
     name: 'Conditionals',
     nameVi: 'Câu Điều Kiện',
-    description: 'Zero, First, Second, and Third conditionals, hypothetical clauses, and unless.',
+    description:
+      'Zero, First, Second, and Third conditionals, hypothetical clauses, and unless.',
     icon: 'GitFork',
   },
   {
     slug: 'passive-voice',
     name: 'Passive Voice',
     nameVi: 'Câu Bị Động',
-    description: 'Transform active statements into passive constructions across various tenses.',
+    description:
+      'Transform active statements into passive constructions across various tenses.',
     icon: 'Repeat',
   },
   {
     slug: 'reported-speech',
     name: 'Reported Speech',
     nameVi: 'Câu Trực Tiếp & Gián Tiếp',
-    description: 'Tense backshifting, pronouns transformation, and reporting questions & commands.',
+    description:
+      'Tense backshifting, pronouns transformation, and reporting questions & commands.',
     icon: 'MessageSquareQuote',
   },
 ];
@@ -243,7 +250,8 @@ export class GrammarService {
     });
 
     const totalQuestions = exercises.length;
-    const percentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+    const percentage =
+      totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
     const passed = percentage >= 70;
 
     // Log Learning Activity for user progress

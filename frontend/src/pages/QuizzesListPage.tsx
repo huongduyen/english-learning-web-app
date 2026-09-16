@@ -29,7 +29,7 @@ export const QuizzesListPage: React.FC = () => {
       quizApi.getQuizzes({
         search: searchTerm,
         level: (selectedLevel as EnglishLevel) || undefined,
-        difficulty: (selectedDifficulty as any) || undefined,
+        difficulty: (selectedDifficulty as 'EASY' | 'MEDIUM' | 'HARD') || undefined,
         limit: 50,
       }),
   });
@@ -92,7 +92,7 @@ export const QuizzesListPage: React.FC = () => {
           <div className="flex flex-wrap items-center gap-2.5">
             <select
               value={selectedLevel}
-              onChange={(e) => setSelectedLevel(e.target.value as any)}
+              onChange={(e) => setSelectedLevel(e.target.value as EnglishLevel | '')}
               className="rounded-xl border border-input bg-card px-3 py-2 text-xs font-semibold text-foreground shadow-xs focus:border-primary focus:outline-none sm:text-sm"
             >
               <option value="">All Levels</option>
@@ -104,7 +104,9 @@ export const QuizzesListPage: React.FC = () => {
 
             <select
               value={selectedDifficulty}
-              onChange={(e) => setSelectedDifficulty(e.target.value as any)}
+              onChange={(e) =>
+                setSelectedDifficulty(e.target.value as 'EASY' | 'MEDIUM' | 'HARD' | '')
+              }
               className="rounded-xl border border-input bg-card px-3 py-2 text-xs font-semibold text-foreground shadow-xs focus:border-primary focus:outline-none sm:text-sm"
             >
               <option value="">All Difficulties</option>

@@ -3,7 +3,7 @@ import { SentenceCorrectionOptions } from '../../../types/quiz';
 import { AlertTriangle, Check, X, Sparkles } from 'lucide-react';
 
 interface Props {
-  options?: SentenceCorrectionOptions | any;
+  options?: SentenceCorrectionOptions;
   selectedAnswer: string;
   onSelectAnswer: (answer: string) => void;
   disabled?: boolean;

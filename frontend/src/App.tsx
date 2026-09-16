@@ -9,6 +9,9 @@ import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { ModulePlaceholderPage } from './pages/ModulePlaceholderPage';
+import { VocabularyListPage } from './pages/VocabularyListPage';
+import { VocabularyDetailPage } from './pages/VocabularyDetailPage';
+import { FlashcardsPage } from './pages/FlashcardsPage';
 import { CheckCircle2, Server, Globe, Database, Shield, ArrowRight } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -202,11 +205,23 @@ export const App: React.FC = () => {
         path="/vocabulary"
         element={
           <ProtectedRoute>
-            <ModulePlaceholderPage
-              category="Vocabulary"
-              title="Vocabulary Topics & Flashcards"
-              description="Master high-frequency English words with spaced repetition, example sentences, and audio pronunciation."
-            />
+            <VocabularyListPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vocabulary/flashcards"
+        element={
+          <ProtectedRoute>
+            <FlashcardsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vocabulary/:id"
+        element={
+          <ProtectedRoute>
+            <VocabularyDetailPage />
           </ProtectedRoute>
         }
       />

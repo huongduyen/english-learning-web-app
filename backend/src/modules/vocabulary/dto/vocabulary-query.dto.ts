@@ -18,4 +18,11 @@ export class VocabularyQueryDto extends PaginationQueryDto {
   @IsOptional()
   @IsEnum(Difficulty)
   difficulty?: Difficulty;
+
+  @ApiPropertyOptional({
+    description: 'Filter by part of speech (noun, verb, adjective, etc.)',
+  })
+  @IsOptional()
+  @IsString()
+  partOfSpeech?: string;
 }

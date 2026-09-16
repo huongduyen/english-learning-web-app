@@ -65,4 +65,14 @@ export class VocabularyController {
   ) {
     return this.vocabularyService.review(id, userId, dto);
   }
+
+  @Post(':id/favorite')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Toggle favorite status for the current user' })
+  @ApiParam({ name: 'id', description: 'Vocabulary UUID' })
+  @ApiResponse({ status: 200, description: 'Toggled favorite status' })
+  @ApiResponse({ status: 404, description: 'Vocabulary not found' })
+  async toggleFavorite(@Param('id') id: string, @CurrentUser() userId: string) {
+    return this.vocabularyService.toggleFavorite(id, userId);
+  }
 }

@@ -162,6 +162,7 @@ model UserVocabulary {
   status         VocabularyStatus @default(NEW)
   reviewCount    Int              @default(0)
   masteryScore   Int              @default(0) // 0 to 100
+  isFavorite     Boolean          @default(false)
   lastReviewedAt DateTime?
   nextReviewAt   DateTime?
   createdAt      DateTime         @default(now())

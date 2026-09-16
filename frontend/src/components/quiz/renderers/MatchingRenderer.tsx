@@ -3,7 +3,7 @@ import { MatchingOptions, MatchingPair } from '../../../types/quiz';
 import { Link2, RotateCcw, Check, X } from 'lucide-react';
 
 interface Props {
-  options?: MatchingOptions | any;
+  options?: MatchingOptions | MatchingPair[];
   selectedAnswer: string;
   onSelectAnswer: (answer: string) => void;
   disabled?: boolean;
@@ -32,8 +32,8 @@ export const MatchingRenderer: React.FC<Props> = ({
   // Parse pairs
   const rawPairs: MatchingPair[] = useMemo(() => {
     if (!options) return [];
-    if (Array.isArray(options.pairs)) return options.pairs;
     if (Array.isArray(options)) return options;
+    if ('pairs' in options && Array.isArray(options.pairs)) return options.pairs;
     return [];
   }, [options]);
 

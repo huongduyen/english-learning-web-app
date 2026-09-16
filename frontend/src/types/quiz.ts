@@ -31,7 +31,7 @@ export interface QuizQuestion {
   prompt: string;
   instruction?: string;
   questionType: QuestionType;
-  options?: any;
+  options?: unknown;
   correctAnswer: string;
   explanation?: string;
   explanationVi?: string;
@@ -101,7 +101,7 @@ export interface QuestionBreakdown {
   prompt: string;
   instruction?: string;
   questionType?: QuestionType;
-  options?: any;
+  options?: unknown;
   submittedAnswer: string | null;
   correctAnswer: string;
   isCorrect: boolean;

@@ -3,7 +3,7 @@ import { SentenceOrderingOptions } from '../../../types/quiz';
 import { RotateCcw, Undo2, Check, X } from 'lucide-react';
 
 interface Props {
-  options?: SentenceOrderingOptions | any;
+  options?: SentenceOrderingOptions | string[];
   selectedAnswer: string;
   onSelectAnswer: (answer: string) => void;
   disabled?: boolean;
@@ -22,8 +22,8 @@ export const SentenceOrderingRenderer: React.FC<Props> = ({
   // Raw tokens list
   const rawTokens: string[] = useMemo(() => {
     if (!options) return [];
-    if (Array.isArray(options.tokens)) return options.tokens;
     if (Array.isArray(options)) return options;
+    if ('tokens' in options && Array.isArray(options.tokens)) return options.tokens;
     return [];
   }, [options]);
 

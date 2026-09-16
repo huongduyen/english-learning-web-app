@@ -29,7 +29,7 @@ export interface GrammarExercise {
   instruction: string;
   question: string;
   questionType: QuestionType;
-  options: any;
+  options: unknown;
   correctAnswer: string;
   explanation?: string;
   explanationVi?: string;

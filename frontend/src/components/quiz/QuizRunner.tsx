@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { QuizQuestion, QuizResultData } from '../../types/quiz';
+import {
+  MatchingOptions,
+  MatchingPair,
+  MultipleChoiceOption,
+  QuizQuestion,
+  QuizResultData,
+  SentenceCorrectionOptions,
+  SentenceOrderingOptions,
+} from '../../types/quiz';
 import { MultipleChoiceRenderer } from './renderers/MultipleChoiceRenderer';
 import { TrueFalseRenderer } from './renderers/TrueFalseRenderer';
 import { FillBlankRenderer } from './renderers/FillBlankRenderer';
@@ -325,7 +333,7 @@ export const QuizRunner: React.FC<QuizRunnerProps> = ({
         <div className="mt-6">
           {currentQuestion.questionType === 'MULTIPLE_CHOICE' && (
             <MultipleChoiceRenderer
-              options={currentQuestion.options}
+              options={currentQuestion.options as MultipleChoiceOption[] | string[] | undefined}
               selectedAnswer={currentAnswer}
               onSelectAnswer={handleSelectAnswer}
               disabled={mode === 'PRACTICE' && isQuestionChecked}
@@ -356,7 +364,7 @@ export const QuizRunner: React.FC<QuizRunnerProps> = ({
 
           {currentQuestion.questionType === 'MATCHING' && (
             <MatchingRenderer
-              options={currentQuestion.options}
+              options={currentQuestion.options as MatchingOptions | MatchingPair[] | undefined}
               selectedAnswer={currentAnswer}
               onSelectAnswer={handleSelectAnswer}
               disabled={mode === 'PRACTICE' && isQuestionChecked}
@@ -367,7 +375,9 @@ export const QuizRunner: React.FC<QuizRunnerProps> = ({
 
           {currentQuestion.questionType === 'SENTENCE_ORDERING' && (
             <SentenceOrderingRenderer
-              options={currentQuestion.options}
+              options={
+                currentQuestion.options as SentenceOrderingOptions | string[] | undefined
+              }
               selectedAnswer={currentAnswer}
               onSelectAnswer={handleSelectAnswer}
               disabled={mode === 'PRACTICE' && isQuestionChecked}
@@ -378,7 +388,7 @@ export const QuizRunner: React.FC<QuizRunnerProps> = ({
 
           {currentQuestion.questionType === 'SENTENCE_CORRECTION' && (
             <SentenceCorrectionRenderer
-              options={currentQuestion.options}
+              options={currentQuestion.options as SentenceCorrectionOptions | undefined}
               selectedAnswer={currentAnswer}
               onSelectAnswer={handleSelectAnswer}
               disabled={mode === 'PRACTICE' && isQuestionChecked}

@@ -1,5 +1,6 @@
 import {
   PrismaClient,
+  Prisma,
   UserRole,
   EnglishLevel,
   Difficulty,
@@ -1372,6 +1373,7 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
       await prisma.grammarExercise.create({
         data: {
           ...ex,
+          options: ex.options ?? Prisma.DbNull,
           lessonId: lesson.id,
         },
       });

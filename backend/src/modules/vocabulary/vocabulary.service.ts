@@ -9,13 +9,24 @@ export class VocabularyService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(query: VocabularyQueryDto, userId?: string) {
-    const { page = 1, limit = 20, search, topicId, level, difficulty } = query;
+    const {
+      page = 1,
+      limit = 20,
+      search,
+      topicId,
+      level,
+      difficulty,
+      partOfSpeech,
+    } = query;
     const skip = (page - 1) * limit;
 
     const where: Prisma.VocabularyWhereInput = {
       ...(topicId && { topicId }),
       ...(difficulty && { difficulty }),
       ...(level && { topic: { level } }),
+      ...(partOfSpeech && {
+        partOfSpeech: { contains: partOfSpeech, mode: 'insensitive' },
+      }),
       ...(search && {
         OR: [
           { word: { contains: search, mode: 'insensitive' } },
@@ -25,7 +36,7 @@ export class VocabularyService {
       }),
     };
 
-    const [total, data] = await Promise.all([
+    const [total, vocabularies] = await Promise.all([
       this.prisma.vocabulary.count({ where }),
       this.prisma.vocabulary.findMany({
         where,
@@ -42,33 +53,55 @@ export class VocabularyService {
               level: true,
             },
           },
-          ...(userId
-            ? {
-                userVocabularies: {
-                  where: { userId },
-                  select: {
-                    status: true,
-                    reviewCount: true,
-                    masteryScore: true,
-                    lastReviewedAt: true,
-                    nextReviewAt: true,
-                  },
-                },
-              }
-            : {}),
         },
       }),
     ]);
 
-    const formattedData = data.map((item) => {
-      const userProgress = item.userVocabularies?.[0] || null;
-      const rest = { ...item };
-      delete (rest as any).userVocabularies;
-      return {
-        ...rest,
-        userProgress,
-      };
-    });
+    const progressMap = new Map<
+      string,
+      {
+        status: VocabularyStatus;
+        reviewCount: number;
+        masteryScore: number;
+        isFavorite: boolean;
+        lastReviewedAt: Date | null;
+        nextReviewAt: Date | null;
+      }
+    >();
+
+    if (userId && vocabularies.length > 0) {
+      const userVocabularies = await this.prisma.userVocabulary.findMany({
+        where: {
+          userId,
+          vocabularyId: { in: vocabularies.map((v) => v.id) },
+        },
+        select: {
+          vocabularyId: true,
+          status: true,
+          reviewCount: true,
+          masteryScore: true,
+          isFavorite: true,
+          lastReviewedAt: true,
+          nextReviewAt: true,
+        },
+      });
+
+      for (const uv of userVocabularies) {
+        progressMap.set(uv.vocabularyId, {
+          status: uv.status,
+          reviewCount: uv.reviewCount,
+          masteryScore: uv.masteryScore,
+          isFavorite: uv.isFavorite,
+          lastReviewedAt: uv.lastReviewedAt,
+          nextReviewAt: uv.nextReviewAt,
+        });
+      }
+    }
+
+    const formattedData = vocabularies.map((item) => ({
+      ...item,
+      userProgress: progressMap.get(item.id) || null,
+    }));
 
     return {
       data: formattedData,
@@ -105,31 +138,39 @@ export class VocabularyService {
   }
 
   async findOne(id: string, userId?: string) {
-    const vocabulary = await this.prisma.vocabulary.findUnique({
-      where: { id },
-      include: {
-        topic: true,
-        ...(userId
-          ? {
-              userVocabularies: {
-                where: { userId },
+    const [vocabulary, userProgress] = await Promise.all([
+      this.prisma.vocabulary.findUnique({
+        where: { id },
+        include: { topic: true },
+      }),
+      userId
+        ? this.prisma.userVocabulary.findUnique({
+            where: {
+              userId_vocabularyId: {
+                userId,
+                vocabularyId: id,
               },
-            }
-          : {}),
-      },
-    });
+            },
+          })
+        : null,
+    ]);
 
     if (!vocabulary) {
       throw new NotFoundException(`Vocabulary with ID ${id} not found`);
     }
 
-    const userProgress = vocabulary.userVocabularies?.[0] || null;
-    const rest = { ...vocabulary };
-    delete (rest as any).userVocabularies;
-
     return {
-      ...rest,
-      userProgress,
+      ...vocabulary,
+      userProgress: userProgress
+        ? {
+            status: userProgress.status,
+            reviewCount: userProgress.reviewCount,
+            masteryScore: userProgress.masteryScore,
+            isFavorite: userProgress.isFavorite,
+            lastReviewedAt: userProgress.lastReviewedAt,
+            nextReviewAt: userProgress.nextReviewAt,
+          }
+        : null,
     };
   }
 
@@ -256,5 +297,47 @@ export class VocabularyService {
     }
 
     return userVocabulary;
+  }
+
+  async toggleFavorite(id: string, userId: string) {
+    const vocabulary = await this.prisma.vocabulary.findUnique({ where: { id } });
+    if (!vocabulary) {
+      throw new NotFoundException(`Vocabulary with ID ${id} not found`);
+    }
+
+    const existing = await this.prisma.userVocabulary.findUnique({
+      where: {
+        userId_vocabularyId: {
+          userId,
+          vocabularyId: id,
+        },
+      },
+    });
+
+    const newFavorite = !existing?.isFavorite;
+
+    const userVocabulary = await this.prisma.userVocabulary.upsert({
+      where: {
+        userId_vocabularyId: {
+          userId,
+          vocabularyId: id,
+        },
+      },
+      create: {
+        userId,
+        vocabularyId: id,
+        status: VocabularyStatus.NEW,
+        isFavorite: true,
+      },
+      update: {
+        isFavorite: newFavorite,
+      },
+    });
+
+    return {
+      vocabularyId: id,
+      isFavorite: userVocabulary.isFavorite,
+      status: userVocabulary.status,
+    };
   }
 }

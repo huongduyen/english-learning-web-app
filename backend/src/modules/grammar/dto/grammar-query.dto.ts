@@ -8,4 +8,8 @@ export class GrammarQueryDto extends PaginationQueryDto {
   @IsOptional()
   @IsEnum(EnglishLevel)
   level?: EnglishLevel;
+
+  @ApiPropertyOptional({ description: 'Filter by grammar category' })
+  @IsOptional()
+  category?: string;
 }

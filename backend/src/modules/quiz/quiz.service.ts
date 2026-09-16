@@ -40,6 +40,9 @@ export class QuizService {
           readingArticle: {
             select: { id: true, title: true, slug: true },
           },
+          grammarLesson: {
+            select: { id: true, title: true, slug: true },
+          },
         },
       }),
     ]);
@@ -58,8 +61,11 @@ export class QuizService {
         ? 'LISTENING'
         : quiz.readingArticle
           ? 'READING'
-          : 'GENERAL',
-      associatedLesson: quiz.listeningLesson || quiz.readingArticle || null,
+          : quiz.grammarLesson
+            ? 'GRAMMAR'
+            : 'GENERAL',
+      associatedLesson:
+        quiz.listeningLesson || quiz.readingArticle || quiz.grammarLesson || null,
       createdAt: quiz.createdAt,
       updatedAt: quiz.updatedAt,
     }));
@@ -96,6 +102,9 @@ export class QuizService {
         readingArticle: {
           select: { id: true, title: true },
         },
+        grammarLesson: {
+          select: { id: true, title: true, slug: true },
+        },
       },
     });
 
@@ -127,9 +136,44 @@ export class QuizService {
     const breakdown = quiz.questions.map((q) => {
       maxPoints += q.points;
       const submittedAnswer = answerMap.get(q.id);
-      const isCorrect =
-        submittedAnswer !== undefined &&
-        submittedAnswer.toLowerCase() === q.correctAnswer.trim().toLowerCase();
+      let isCorrect = false;
+
+      if (submittedAnswer !== undefined && submittedAnswer !== null && submittedAnswer !== '') {
+        const cleanSubmitted = submittedAnswer.trim();
+        const cleanCorrect = q.correctAnswer.trim();
+
+        if (q.questionType === 'SENTENCE_ORDERING') {
+          // Normalize whitespace, casing, and trailing punctuation
+          const normSub = cleanSubmitted.toLowerCase().replace(/[.,!?;:]/g, '').replace(/\s+/g, ' ');
+          const normCorr = cleanCorrect.toLowerCase().replace(/[.,!?;:]/g, '').replace(/\s+/g, ' ');
+          isCorrect = normSub === normCorr;
+        } else if (q.questionType === 'MATCHING') {
+          // Compare sorted pairs e.g. "1:a,2:b" vs "2:b,1:a"
+          const subPairs = cleanSubmitted.toLowerCase().split(',').map((s) => s.trim()).sort().join(',');
+          const corrPairs = cleanCorrect.toLowerCase().split(',').map((s) => s.trim()).sort().join(',');
+          isCorrect = subPairs === corrPairs;
+        } else if (q.questionType === 'FILL_BLANK' || q.questionType === 'SENTENCE_CORRECTION') {
+          // Support multiple acceptable alternatives separated by |
+          const alternatives = cleanCorrect.split(/\s*\|\s*/).map((s) => s.toLowerCase().trim());
+          isCorrect = alternatives.includes(cleanSubmitted.toLowerCase());
+        } else if (q.questionType === 'MULTIPLE_CHOICE') {
+          // Check if matches option id or option text
+          const directMatch = cleanSubmitted.toLowerCase() === cleanCorrect.toLowerCase();
+          if (directMatch) {
+            isCorrect = true;
+          } else if (Array.isArray(q.options)) {
+            const matchedOption = (q.options as any[]).find(
+              (opt) =>
+                (opt.id && opt.id.toLowerCase() === cleanSubmitted.toLowerCase() && opt.id.toLowerCase() === cleanCorrect.toLowerCase()) ||
+                (opt.text && opt.text.toLowerCase() === cleanSubmitted.toLowerCase() && opt.id && opt.id.toLowerCase() === cleanCorrect.toLowerCase()) ||
+                (opt.id && opt.id.toLowerCase() === cleanSubmitted.toLowerCase() && opt.text && opt.text.toLowerCase() === cleanCorrect.toLowerCase()),
+            );
+            isCorrect = !!matchedOption;
+          }
+        } else {
+          isCorrect = cleanSubmitted.toLowerCase() === cleanCorrect.toLowerCase();
+        }
+      }
 
       const pointsEarned = isCorrect ? q.points : 0;
       earnedPoints += pointsEarned;
@@ -137,6 +181,8 @@ export class QuizService {
       return {
         questionId: q.id,
         prompt: q.prompt,
+        questionType: q.questionType,
+        options: q.options,
         submittedAnswer: submittedAnswer || null,
         correctAnswer: q.correctAnswer,
         isCorrect,
@@ -150,8 +196,10 @@ export class QuizService {
     const percentage =
       maxPoints > 0 ? Math.round((earnedPoints / maxPoints) * 1000) / 10 : 0;
     const passed = percentage >= quiz.passingScore;
+    const correctCount = breakdown.filter((b) => b.isCorrect).length;
+    const incorrectCount = breakdown.length - correctCount;
 
-    // 1. Record Quiz Attempt
+    // 1. Record Quiz Attempt in PostgreSQL
     const attempt = await this.prisma.quizAttempt.create({
       data: {
         userId,
@@ -181,7 +229,7 @@ export class QuizService {
       },
     });
 
-    // 3. Award XP
+    // 3. Award XP to learner
     const xpReward = passed ? 30 : 10;
     await this.prisma.userProfile.updateMany({
       where: { userId },
@@ -197,6 +245,8 @@ export class QuizService {
       percentage,
       passed,
       passingScore: quiz.passingScore,
+      correctCount,
+      incorrectCount,
       xpAwarded: xpReward,
       completedAt: attempt.completedAt,
       breakdown,

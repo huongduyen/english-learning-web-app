@@ -1,6 +1,6 @@
-import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class QuestionAnswerDto {
   @ApiProperty({ description: 'Question ID' })
@@ -20,4 +20,10 @@ export class SubmitQuizDto {
   @ValidateNested({ each: true })
   @Type(() => QuestionAnswerDto)
   answers: QuestionAnswerDto[];
+
+  @ApiPropertyOptional({ description: 'Time spent in seconds' })
+  @IsOptional()
+  @IsNumber()
+  durationSeconds?: number;
 }
+

@@ -4,6 +4,8 @@ import { useAppStore } from '../store/useAppStore';
 import { useAuthStore } from '../store/useAuthStore';
 import {
   BookOpen,
+  BookA,
+  Trophy,
   Moon,
   Sun,
   LogOut,
@@ -58,6 +60,30 @@ export const Navbar: React.FC = () => {
                 >
                   <LayoutDashboard className="h-4 w-4" />
                   Dashboard
+                </Link>
+                <Link
+                  to="/vocabulary"
+                  id="nav-vocabulary-link"
+                  className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <BookOpen className="h-4 w-4" />
+                  Vocabulary
+                </Link>
+                <Link
+                  to="/grammar"
+                  id="nav-grammar-link"
+                  className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <BookA className="h-4 w-4" />
+                  Grammar
+                </Link>
+                <Link
+                  to="/quizzes"
+                  id="nav-quizzes-link"
+                  className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <Trophy className="h-4 w-4" />
+                  Quizzes
                 </Link>
                 <Link
                   to="/profile"

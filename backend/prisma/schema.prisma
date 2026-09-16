@@ -56,6 +56,8 @@ enum QuestionType {
   FILL_BLANK
   MATCHING
   TRUE_FALSE
+  SENTENCE_ORDERING
+  SENTENCE_CORRECTION
 }
 
 enum MessageRole {
@@ -186,6 +188,8 @@ model GrammarLesson {
   slug      String            @unique
   title     String
   titleVi   String
+  category  String            @default("Basic Grammar")
+  categoryVi String?
   summary   String?
   content   String            @db.Text
   level     EnglishLevel      @default(BEGINNER)
@@ -194,9 +198,11 @@ model GrammarLesson {
   updatedAt DateTime          @updatedAt
 
   exercises GrammarExercise[]
+  quiz      Quiz?
 
   @@index([slug])
   @@index([level])
+  @@index([category])
   @@map("grammar_lessons")
 }
 
@@ -279,11 +285,13 @@ model Quiz {
   passingScore      Int              @default(70) // percentage
   listeningLessonId String?          @unique
   readingArticleId  String?          @unique
+  grammarLessonId   String?          @unique
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
 
   listeningLesson   ListeningLesson? @relation(fields: [listeningLessonId], references: [id], onDelete: SetNull)
   readingArticle    ReadingArticle?  @relation(fields: [readingArticleId], references: [id], onDelete: SetNull)
+  grammarLesson     GrammarLesson?   @relation(fields: [grammarLessonId], references: [id], onDelete: SetNull)
   questions         Question[]
   attempts          QuizAttempt[]
 

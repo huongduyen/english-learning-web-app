@@ -12,6 +12,10 @@ import { ModulePlaceholderPage } from './pages/ModulePlaceholderPage';
 import { VocabularyListPage } from './pages/VocabularyListPage';
 import { VocabularyDetailPage } from './pages/VocabularyDetailPage';
 import { FlashcardsPage } from './pages/FlashcardsPage';
+import { GrammarListPage } from './pages/GrammarListPage';
+import { GrammarLessonPage } from './pages/GrammarLessonPage';
+import { QuizzesListPage } from './pages/QuizzesListPage';
+import { QuizPlayerPage } from './pages/QuizPlayerPage';
 import { CheckCircle2, Server, Globe, Database, Shield, ArrowRight } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -229,11 +233,31 @@ export const App: React.FC = () => {
         path="/grammar"
         element={
           <ProtectedRoute>
-            <ModulePlaceholderPage
-              category="Grammar"
-              title="Grammar Lessons & Practice"
-              description="Strengthen your understanding of English tenses, sentence structures, and interactive exercises."
-            />
+            <GrammarListPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/grammar/:id"
+        element={
+          <ProtectedRoute>
+            <GrammarLessonPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/quizzes"
+        element={
+          <ProtectedRoute>
+            <QuizzesListPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/quiz/:id"
+        element={
+          <ProtectedRoute>
+            <QuizPlayerPage />
           </ProtectedRoute>
         }
       />

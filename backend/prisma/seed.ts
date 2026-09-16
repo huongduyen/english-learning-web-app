@@ -891,14 +891,17 @@ async function main() {
   }
 
   // ==============================================
-  // 5. Seed Grammar Lessons (10+ lessons)
+  // 5. Seed Grammar Lessons (14 lessons across 8 categories)
   // ==============================================
-  console.log('Seeding grammar lessons & exercises...');
+  console.log('Seeding grammar lessons & exercises across 8 categories...');
   const grammarLessonsData = [
+    // 1. TENSES (6 lessons)
     {
       slug: 'present-simple-tense',
       title: 'Present Simple Tense',
       titleVi: 'Thì Hiện Tại Đơn',
+      category: 'Tenses',
+      categoryVi: 'Các Thì Trong Tiếng Anh',
       summary: 'Usage, structures, and common rules for facts, habits, and general truths.',
       level: EnglishLevel.BEGINNER,
       order: 1,
@@ -908,7 +911,7 @@ async function main() {
 ## 1. Công Dụng (Usage)
 - Diễn tả một chân lý, sự thật hiển nhiên: *The sun rises in the east.*
 - Diễn tả thói quen, hành động lặp đi lặp lại: *I drink coffee every morning.*
-- Diễn tả lịch trình tàu xe, máy bay: *The flight departs at 8:00 AM tomorrow.*
+- Diễn tả lịch trình cố định: *The flight departs at 8:00 AM tomorrow.*
 
 ## 2. Công Thức (Form)
 - **Khẳng định (+)**: S + V(s/es) + O
@@ -939,12 +942,24 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           explanationVi: 'Chủ ngữ số nhiều "They" đi cùng trợ động từ phủ định "do" (do not / don’t).',
           order: 2,
         },
+        {
+          instruction: 'Sentence correction: Fix the error in the auxiliary verb.',
+          question: 'He don\'t know how to drive a manual transmission car.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: "don't", correction: "doesn't" },
+          correctAnswer: "doesn't",
+          explanation: 'Third person singular subject "He" takes "doesn\'t", not "don\'t".',
+          explanationVi: 'Chủ ngữ "He" là ngôi thứ 3 số ít, trợ động từ phủ định phải là "doesn\'t".',
+          order: 3,
+        },
       ],
     },
     {
       slug: 'present-continuous-tense',
       title: 'Present Continuous Tense',
       titleVi: 'Thì Hiện Tại Tiếp Diễn',
+      category: 'Tenses',
+      categoryVi: 'Các Thì Trong Tiếng Anh',
       summary: 'Express actions occurring right now or future arranged appointments.',
       level: EnglishLevel.BEGINNER,
       order: 2,
@@ -969,11 +984,11 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           options: ['play', 'is playing', 'are playing', 'played'],
           correctAnswer: 'are playing',
           explanation: '"The kids" is plural, so we use "are playing".',
-          explanationVi: '"The kids" là danh từ số nhiều, đi kèm tín hiệu "Look!" diễn tả hành động đang xảy ra nên dùng "are playing".',
+          explanationVi: '"The kids" là danh từ số nhiều, đi kèm tín hiệu "Look!" nên dùng "are playing".',
           order: 1,
         },
         {
-          instruction: 'Fill in the missing word.',
+          instruction: 'Fill in the missing continuous verb form.',
           question: 'Right now, Linh is _____ (study) for her final English exam.',
           questionType: QuestionType.FILL_BLANK,
           options: null,
@@ -982,12 +997,24 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           explanationVi: 'Động từ "study" chuyển sang dạng tiếp diễn là "studying".',
           order: 2,
         },
+        {
+          instruction: 'Sentence correction: Correct the stative verb in continuous tense.',
+          question: 'I am understanding this difficult grammar rule now.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'am understanding', correction: 'understand' },
+          correctAnswer: 'understand',
+          explanation: '"Understand" is a stative verb and is not used in the continuous form.',
+          explanationVi: '"Understand" là động từ chỉ trạng thái nhận thức, không chia ở thì tiếp diễn.',
+          order: 3,
+        },
       ],
     },
     {
       slug: 'past-simple-tense',
       title: 'Past Simple Tense',
       titleVi: 'Thì Quá Khứ Đơn',
+      category: 'Tenses',
+      categoryVi: 'Các Thì Trong Tiếng Anh',
       summary: 'Describing completed actions in the past with specific time markers.',
       level: EnglishLevel.BEGINNER,
       order: 3,
@@ -995,14 +1022,13 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
 # Thì Quá Khứ Đơn (Past Simple Tense)
 
 ## 1. Công Dụng
-- Diễn tả hành động đã xảy ra và chấm dứt hoàn toàn trong quá khứ.
-- Chuỗi các hành động liên tiếp trong quá khứ.
+- Hành động đã xảy ra và kết thúc hoàn toàn trong quá khứ.
+- Chuỗi các hành động liên tiếp trong quá khứ: *He came home, took a shower, and went to bed.*
 
 ## 2. Công Thức
-- Với To Be: S + was/were + ...
-- Với Động từ thường: S + V2/ed + ...
-- Phủ định: S + did not + V(nguyên mẫu)
-- Nghi vấn: Did + S + V(nguyên mẫu)?
+- **(+)**: S + V2/ed
+- **(-)**: S + did not + V(nguyên mẫu)
+- **(?)**: Did + S + V(nguyên mẫu)?
       `,
       exercises: [
         {
@@ -1025,12 +1051,24 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           explanationVi: 'Dùng trợ động từ "Did" ở đầu câu hỏi quá khứ đơn.',
           order: 2,
         },
+        {
+          instruction: 'Sentence correction: Fix the double past tense error.',
+          question: 'We didn\'t went to the cinema yesterday evening.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'went', correction: 'go' },
+          correctAnswer: 'go',
+          explanation: 'After negative auxiliary "didn\'t", the main verb returns to base form "go".',
+          explanationVi: 'Sau trợ động từ phủ định "didn\'t", động từ chính ở dạng nguyên thể "go".',
+          order: 3,
+        },
       ],
     },
     {
       slug: 'past-continuous-tense',
       title: 'Past Continuous Tense',
       titleVi: 'Thì Quá Khứ Tiếp Diễn',
+      category: 'Tenses',
+      categoryVi: 'Các Thì Trong Tiếng Anh',
       summary: 'Ongoing actions in the past interrupted by another event or parallel past actions.',
       level: EnglishLevel.ELEMENTARY,
       order: 4,
@@ -1038,12 +1076,13 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
 # Thì Quá Khứ Tiếp Diễn (Past Continuous Tense)
 
 ## 1. Công Dụng
-- Hành động đang diễn ra tại một thời điểm xác định trong quá khứ: *At 8 PM yesterday, I was reading.*
-- Một hành động đang xảy ra thì có một hành động khác xen vào (When / While).
-- Hai hành động xảy ra song song cùng lúc trong quá khứ: *While mom was cooking, dad was washing dishes.*
+- Hành động đang diễn ra tại một thời điểm xác định trong quá khứ (*At 8 PM yesterday, I was studying*).
+- Hành động đang xảy ra thì có hành động khác xen vào (When / While).
+- Hai hành động xảy ra song song: *While mom was cooking, dad was washing dishes.*
 
 ## 2. Công Thức
-- S + was/were + V-ing
+- **(+)**: S + was/were + V-ing
+- **(-)**: S + was/were not + V-ing
       `,
       exercises: [
         {
@@ -1053,7 +1092,7 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           options: ['walked', 'was walking', 'am walking', 'were walking'],
           correctAnswer: 'was walking',
           explanation: 'An ongoing action interrupted in the past uses was/were + V-ing.',
-          explanationVi: 'Hành động đang diễn ra trong quá khứ (was walking) thì bị hành động khác xen vào (started to rain).',
+          explanationVi: 'Hành động đang diễn ra trong quá khứ dùng was/were + V-ing: "was walking".',
           order: 1,
         },
         {
@@ -1063,8 +1102,18 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           options: null,
           correctAnswer: 'were watching',
           explanation: 'Subject "they" takes "were watching".',
-          explanationVi: 'Chủ ngữ số nhiều "they" đi với "were watching" tại mốc thời gian xác định trong quá khứ.',
+          explanationVi: 'Chủ ngữ "they" đi với "were watching".',
           order: 2,
+        },
+        {
+          instruction: 'Sentence correction: Correct the subject-verb agreement.',
+          question: 'The boys was playing soccer when the storm hit the town.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'was playing', correction: 'were playing' },
+          correctAnswer: 'were playing',
+          explanation: 'Plural subject "The boys" requires "were playing".',
+          explanationVi: 'Chủ ngữ số nhiều "The boys" đi với "were playing".',
+          order: 3,
         },
       ],
     },
@@ -1072,6 +1121,8 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
       slug: 'present-perfect-tense',
       title: 'Present Perfect Tense',
       titleVi: 'Thì Hiện Tại Hoàn Thành',
+      category: 'Tenses',
+      categoryVi: 'Các Thì Trong Tiếng Anh',
       summary: 'Connecting past experiences and ongoing actions with the present moment.',
       level: EnglishLevel.ELEMENTARY,
       order: 5,
@@ -1079,12 +1130,13 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
 # Thì Hiện Tại Hoàn Thành (Present Perfect Tense)
 
 ## 1. Công Dụng
-- Hành động đã xảy ra trong quá khứ nhưng không nêu rõ thời gian: *I have seen that movie.*
-- Hành động bắt đầu trong quá khứ và vẫn còn tiếp diễn đến hiện tại (since, for): *She has lived in Hanoi for 5 years.*
-- Kinh nghiệm, trải nghiệm (ever, never): *Have you ever tried Vietnamese egg coffee?*
+- Hành động xảy ra trong quá khứ nhưng kết quả hoặc liên hệ vẫn còn ở hiện tại.
+- Hành động bắt đầu trong quá khứ và vẫn tiếp diễn đến nay (*since, for*).
+- Trải nghiệm cuộc sống (*ever, never*).
 
 ## 2. Công Thức
-- S + have/has + V3/ed + O
+- **(+)**: S + have/has + V3/ed
+- **(-)**: S + have/has not + V3/ed
       `,
       exercises: [
         {
@@ -1094,7 +1146,7 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           options: ['works', 'worked', 'has worked', 'is working'],
           correctAnswer: 'has worked',
           explanation: '"Since 2021" indicates an action starting in the past continuing until now, requiring Present Perfect.',
-          explanationVi: '"Since 2021" là mốc thời gian bắt đầu trong quá khứ và kéo dài tới hiện tại, dùng thì hiện tại hoàn thành "has worked".',
+          explanationVi: '"Since 2021" yêu cầu thì hiện tại hoàn thành "has worked".',
           order: 1,
         },
         {
@@ -1107,12 +1159,24 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           explanationVi: 'Dùng "for" trước một khoảng thời gian (three years).',
           order: 2,
         },
+        {
+          instruction: 'Sentence correction: Fix the past time marker with present perfect.',
+          question: 'I have visited Da Nang city yesterday afternoon.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'have visited', correction: 'visited' },
+          correctAnswer: 'visited',
+          explanation: 'Specific past time markers like "yesterday" require Past Simple "visited", not Present Perfect.',
+          explanationVi: 'Mốc thời gian quá khứ xác định "yesterday" bắt buộc dùng quá khứ đơn "visited".',
+          order: 3,
+        },
       ],
     },
     {
       slug: 'future-simple-will-going-to',
       title: 'Future Simple: Will vs Be Going To',
       titleVi: 'Tương Lai Đơn: Will và Be Going To',
+      category: 'Tenses',
+      categoryVi: 'Các Thì Trong Tiếng Anh',
       summary: 'Differentiating spontaneous decisions from pre-arranged plans and predictions.',
       level: EnglishLevel.ELEMENTARY,
       order: 6,
@@ -1120,13 +1184,12 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
 # Tương Lai: Will vs Be Going To
 
 ## 1. Will + V(nguyên mẫu)
-- Quyết định tức thì ngay tại thời điểm nói: *The phone is ringing. I will answer it.*
-- Lời hứa, lời đề nghị giúp đỡ: *I will help you with your homework.*
-- Dự đoán dựa trên quan điểm cá nhân: *I think our team will win.*
+- Quyết định nảy sinh tức thì tại thời điểm nói: *The phone is ringing. I will answer it.*
+- Lời hứa, lời đề nghị: *I will help you.*
 
 ## 2. Be Going To + V(nguyên mẫu)
-- Kế hoạch, dự định đã có từ trước: *I am going to visit my grandparents this weekend.*
-- Dự đoán có bằng chứng rõ ràng trước mắt: *Look at those black clouds! It is going to rain.*
+- Kế hoạch, dự định đã có từ trước: *I am going to visit Hanoi this weekend.*
+- Dự đoán có bằng chứng cụ thể: *Look at those black clouds! It is going to rain.*
       `,
       exercises: [
         {
@@ -1136,25 +1199,39 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           options: ['will', 'is going to', 'shall', 'was going to'],
           correctAnswer: 'is going to',
           explanation: 'The dark sky is clear evidence, so use "is going to".',
-          explanationVi: 'Có bằng chứng cụ thể rõ ràng trước mắt (bầu trời u ám), ta dùng cấu trúc "is going to".',
+          explanationVi: 'Có bằng chứng cụ thể trước mắt nên dùng "is going to".',
           order: 1,
         },
         {
-          instruction: 'Fill in the blank with the correct modal verb for spontaneous decision.',
-          question: 'Don’t carry that heavy box alone. I _____ carry it for you.',
+          instruction: 'Fill in the blank with the modal verb for spontaneous decision.',
+          question: 'Don\'t carry that heavy box alone. I _____ carry it for you.',
           questionType: QuestionType.FILL_BLANK,
           options: null,
           correctAnswer: 'will',
           explanation: 'A spontaneous offer to help uses "will".',
-          explanationVi: 'Quyết định giúp đỡ nảy sinh ngay thời điểm nói dùng "will".',
+          explanationVi: 'Quyết định giúp đỡ nảy sinh tức thì dùng "will".',
           order: 2,
+        },
+        {
+          instruction: 'Sentence correction: Fix the prediction based on evidence.',
+          question: 'Look at that reckless driver! He will crash into the fence.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'will crash', correction: 'is going to crash' },
+          correctAnswer: 'is going to crash',
+          explanation: 'Predictions with direct immediate evidence use "is going to crash".',
+          explanationVi: 'Dự đoán có bằng chứng trước mắt dùng "is going to crash".',
+          order: 3,
         },
       ],
     },
+
+    // 2. MODAL VERBS (1 lesson)
     {
       slug: 'modal-verbs',
       title: 'Modal Verbs: Can, Could, Must, Should',
       titleVi: 'Động Từ Khuyết Thiếu (Modal Verbs)',
+      category: 'Modal Verbs',
+      categoryVi: 'Động Từ Khuyết Thiếu',
       summary: 'Ability, permission, obligations, prohibitions, and recommendations.',
       level: EnglishLevel.INTERMEDIATE,
       order: 7,
@@ -1163,13 +1240,14 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
 
 ## 1. Can / Could
 - Khả năng (ability): *She can speak English fluently.*
-- Yêu cầu lịch sự: *Could you please open the window?*
+- Lời yêu cầu lịch sự: *Could you please open the window?*
 
 ## 2. Must vs Have to
-- Bắt buộc, mệnh lệnh thiết yếu: *You must wear a helmet when riding a motorbike in Vietnam.*
+- Bắt buộc nghiêm ngặt: *You must wear a helmet on a motorbike.*
+- Phủ định *Must not* = Cấm đoán.
 
 ## 3. Should
-- Lời khuyên, khuyến nghị: *You should practice speaking English every day.*
+- Lời khuyên, khuyến nghị: *You should exercise every morning.*
       `,
       exercises: [
         {
@@ -1179,7 +1257,7 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           options: ['might', 'should', 'must', 'could'],
           correctAnswer: 'must',
           explanation: 'Law requirement implies strict obligation: "must".',
-          explanationVi: 'Quy định luật pháp bắt buộc người tham gia giao thông phải đội mũ bảo hiểm: "must".',
+          explanationVi: 'Quy định luật pháp bắt buộc dùng "must".',
           order: 1,
         },
         {
@@ -1189,18 +1267,315 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           options: null,
           correctAnswer: 'should',
           explanation: 'Use "should" to give healthy advice.',
-          explanationVi: 'Dùng "should" để đưa ra lời khuyên nhủ nhẹ nhàng.',
+          explanationVi: 'Dùng "should" để đưa ra lời khuyên.',
           order: 2,
+        },
+        {
+          instruction: 'Sentence correction: Fix the modal verb follower.',
+          question: 'She should to consult a doctor immediately.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'should to consult', correction: 'should consult' },
+          correctAnswer: 'consult',
+          explanation: 'Modal verbs like "should" take bare infinitive without "to".',
+          explanationVi: 'Động từ khuyết thiếu "should" đi với động từ nguyên mẫu không "to".',
+          order: 3,
         },
       ],
     },
+
+    // 3. ARTICLES (1 lesson)
+    {
+      slug: 'articles-a-an-the',
+      title: 'Articles: A, An, The & Zero Article',
+      titleVi: 'Mạo Từ: A, An, The và Zero Article',
+      category: 'Articles',
+      categoryVi: 'Mạo Từ (A, An, The)',
+      summary: 'Rules for indefinite, definite, and zero articles with countability distinctions.',
+      level: EnglishLevel.BEGINNER,
+      order: 8,
+      content: `
+# Mạo Từ: A, An, The & Zero Article
+
+## 1. Mạo Từ Bất Định (A / An)
+- **A**: Trước từ phát âm bắt đầu bằng phụ âm (*a book, a university*).
+- **An**: Trước từ phát âm bắt đầu bằng nguyên âm (*an apple, an hour*).
+
+## 2. Mạo Từ Xác Định (The)
+- Đứng trước danh từ đã được xác định hoặc duy nhất (*the sun, the world*).
+- Trước nhạc cụ: *play the violin*. Trước so sánh nhất: *the tallest building*.
+
+## 3. Không Dùng Mạo Từ (Zero Article - Ø)
+- Trước danh từ số nhiều / không đếm được nói chung (*I like coffee*).
+- Bữa ăn: *have lunch*. Môn học, thể thao: *study math, play tennis*.
+      `,
+      exercises: [
+        {
+          instruction: 'Choose the correct article for the sentence.',
+          question: 'It took us more than _____ hour to finish our homework.',
+          questionType: QuestionType.MULTIPLE_CHOICE,
+          options: ['a', 'an', 'the', 'no article'],
+          correctAnswer: 'an',
+          explanation: '"Hour" begins with a silent "h", so its initial vowel sound requires "an".',
+          explanationVi: '"Hour" có âm "h" câm nên bắt đầu bằng nguyên âm /aʊər/, dùng "an".',
+          order: 1,
+        },
+        {
+          instruction: 'Fill in the blank with the appropriate article (a, an, or the).',
+          question: 'Look at _____ moon tonight! It is full and shining brightly.',
+          questionType: QuestionType.FILL_BLANK,
+          options: null,
+          correctAnswer: 'the',
+          explanation: 'The moon is unique in our celestial environment, requiring "the".',
+          explanationVi: 'Mặt trăng là vật thể duy nhất nên đi với "the".',
+          order: 2,
+        },
+        {
+          instruction: 'Sentence correction: Fix the article error in the sentence.',
+          question: 'She is studying at an university in London.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'an university', correction: 'a university' },
+          correctAnswer: 'a',
+          explanation: '"University" begins with consonant sound /j/, so use "a university".',
+          explanationVi: '"University" phát âm bắt đầu bằng phụ âm /j/, dùng "a university".',
+          order: 3,
+        },
+      ],
+    },
+
+    // 4. PREPOSITIONS (1 lesson)
+    {
+      slug: 'prepositions-time-place-in-on-at',
+      title: 'Prepositions of Time & Place: In, On, At',
+      titleVi: 'Giới Từ Thời Gian & Nơi Chốn: In, On, At',
+      category: 'Prepositions',
+      categoryVi: 'Giới Từ Chỉ Thời Gian & Nơi Chốn',
+      summary: 'Distinguish broad, surface, and exact points of time and physical locations.',
+      level: EnglishLevel.ELEMENTARY,
+      order: 9,
+      content: `
+# Giới Từ Thời Gian & Nơi Chốn: In, On, At
+
+## 1. Thời Gian
+- **In**: Năm, mùa, tháng, thế kỷ (*in 2026, in summer, in July, in the morning*).
+- **On**: Ngày trong tuần, ngày tháng cụ thể (*on Monday, on October 10th*).
+- **At**: Giờ cụ thể, thời điểm ngắn (*at 7:00 AM, at noon, at midnight*).
+
+## 2. Nơi Chốn
+- **In**: Không gian 3D, thành phố, quốc gia (*in Hanoi, in Vietnam, in the room*).
+- **On**: Bề mặt, đường phố, tầng nhà (*on the table, on Tran Phu Street, on the 2nd floor*).
+- **At**: Địa chỉ cụ thể, điểm dừng (*at 123 Main Street, at the bus stop*).
+      `,
+      exercises: [
+        {
+          instruction: 'Select the correct preposition of time.',
+          question: 'Our flight departs _____ 7:15 AM tomorrow morning.',
+          questionType: QuestionType.MULTIPLE_CHOICE,
+          options: ['in', 'on', 'at', 'by'],
+          correctAnswer: 'at',
+          explanation: 'Exact clock times take "at".',
+          explanationVi: 'Giờ giấc chính xác đi với "at".',
+          order: 1,
+        },
+        {
+          instruction: 'Fill in the blank with the correct preposition.',
+          question: 'We always hold team sync meetings _____ Monday afternoons.',
+          questionType: QuestionType.FILL_BLANK,
+          options: null,
+          correctAnswer: 'on',
+          explanation: 'Days of the week take "on".',
+          explanationVi: 'Các ngày trong tuần đi cùng "on".',
+          order: 2,
+        },
+        {
+          instruction: 'Sentence correction: Fix the preposition error.',
+          question: 'She was born at October in a small peaceful town.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'at October', correction: 'in October' },
+          correctAnswer: 'in',
+          explanation: 'Months alone take preposition "in".',
+          explanationVi: 'Tên tháng đứng một mình đi với giới từ "in".',
+          order: 3,
+        },
+      ],
+    },
+
+    // 5. CONDITIONALS (1 lesson)
+    {
+      slug: 'conditionals-type-1-2',
+      title: 'Conditionals: Type 1 & Type 2',
+      titleVi: 'Câu Điều Kiện: Loại 1 và Loại 2',
+      category: 'Conditionals',
+      categoryVi: 'Câu Điều Kiện',
+      summary: 'Hypothetical situations versus real and probable future conditions.',
+      level: EnglishLevel.INTERMEDIATE,
+      order: 10,
+      content: `
+# Câu Điều Kiện Loại 1 & Loại 2
+
+## 1. Loại 1 (Có thật ở hiện tại / tương lai)
+- **Cấu trúc**: If + S + V(hiện tại đơn), S + will + V(nguyên mẫu)
+- *Ví dụ*: If it rains, we will stay home.
+
+## 2. Loại 2 (Giả định trái ngược thực tế ở hiện tại)
+- **Cấu trúc**: If + S + V2/ed (were cho mọi ngôi), S + would + V(nguyên mẫu)
+- *Ví dụ*: If I were you, I would take that offer.
+      `,
+      exercises: [
+        {
+          instruction: 'Select the correct verb form for Type 1 conditional.',
+          question: 'If you study consistently, you _____ the exam with high scores.',
+          questionType: QuestionType.MULTIPLE_CHOICE,
+          options: ['pass', 'will pass', 'would pass', 'passed'],
+          correctAnswer: 'will pass',
+          explanation: 'First conditional main clause uses "will + base verb".',
+          explanationVi: 'Mệnh đề chính câu điều kiện loại 1 dùng "will + V".',
+          order: 1,
+        },
+        {
+          instruction: 'Fill in the blank with the hypothetical past subjunctive of "be".',
+          question: 'If I _____ you, I would take that scholarship opportunity.',
+          questionType: QuestionType.FILL_BLANK,
+          options: null,
+          correctAnswer: 'were',
+          explanation: 'In second conditional, "were" is conventionally used for all subjects.',
+          explanationVi: 'Trong câu điều kiện loại 2, dùng "were" cho tất cả các ngôi.',
+          order: 2,
+        },
+        {
+          instruction: 'Sentence correction: Fix the modal in first conditional if-clause.',
+          question: 'If it will rain tomorrow, we will postpone the outdoor match.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'will rain', correction: 'rains' },
+          correctAnswer: 'rains',
+          explanation: 'In conditional type 1, the IF clause uses Present Simple "rains", not "will rain".',
+          explanationVi: 'Mệnh đề if loại 1 dùng thì hiện tại đơn "rains", không dùng "will rain".',
+          order: 3,
+        },
+      ],
+    },
+
+    // 6. PASSIVE VOICE (1 lesson)
+    {
+      slug: 'passive-voice',
+      title: 'Passive Voice Across Tenses',
+      titleVi: 'Câu Bị Động Các Thì',
+      category: 'Passive Voice',
+      categoryVi: 'Câu Bị Động',
+      summary: 'Transforming active sentences into passive voice to emphasize the recipient of action.',
+      level: EnglishLevel.UPPER_INTERMEDIATE,
+      order: 11,
+      content: `
+# Câu Bị Động (Passive Voice)
+
+## 1. Nguyên Tắc Biến Đổi
+- Cấu trúc chung: **Be + V3/ed** (động từ "Be" chia theo thì của câu chủ động).
+- Tân ngữ câu chủ động trở thành chủ ngữ câu bị động.
+
+## 2. Công Thức Theo Thì
+- Hiện tại đơn: am/is/are + V3/ed
+- Quá khứ đơn: was/were + V3/ed
+- Hiện tại hoàn thành: have/has been + V3/ed
+      `,
+      exercises: [
+        {
+          instruction: 'Choose the correct passive verb phrase.',
+          question: 'The famous bridge _____ by skilled engineers in 1902.',
+          questionType: QuestionType.MULTIPLE_CHOICE,
+          options: ['built', 'was built', 'is built', 'has been built'],
+          correctAnswer: 'was built',
+          explanation: 'In 1902 denotes a past event in passive voice: "was built".',
+          explanationVi: 'Năm 1902 trong quá khứ ở thể bị động dùng "was built".',
+          order: 1,
+        },
+        {
+          instruction: 'Fill in the past participle.',
+          question: 'English is _____ (speak) as an official language in many countries.',
+          questionType: QuestionType.FILL_BLANK,
+          options: null,
+          correctAnswer: 'spoken',
+          explanation: 'The past participle (V3) of "speak" is "spoken".',
+          explanationVi: 'Phân từ hai của "speak" là "spoken".',
+          order: 2,
+        },
+        {
+          instruction: 'Sentence correction: Fix the passive auxiliary.',
+          question: 'The report was wrote by our senior financial analyst.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'wrote', correction: 'written' },
+          correctAnswer: 'written',
+          explanation: 'Passive voice requires past participle V3 "written", not simple past V2 "wrote".',
+          explanationVi: 'Câu bị động cần phân từ hai V3 "written", không dùng V2 "wrote".',
+          order: 3,
+        },
+      ],
+    },
+
+    // 7. REPORTED SPEECH (1 lesson)
+    {
+      slug: 'reported-speech',
+      title: 'Reported Speech: Statements & Questions',
+      titleVi: 'Câu Trực Tiếp & Gián Tiếp (Reported Speech)',
+      category: 'Reported Speech',
+      categoryVi: 'Câu Trực Tiếp & Gián Tiếp',
+      summary: 'Rules for backshifting tenses, adjusting pronouns, and changing time markers.',
+      level: EnglishLevel.INTERMEDIATE,
+      order: 12,
+      content: `
+# Câu Trực Tiếp & Gián Tiếp (Reported Speech)
+
+## 1. Nguyên Tắc Lùi Thì (Backshift)
+Khi động từ dẫn ở quá khứ (*said, told*), lùi một thì:
+- Present Simple -> Past Simple (*"I work" -> He said he worked*)
+- Present Continuous -> Past Continuous (*"I am studying" -> She said she was studying*)
+- Will -> Would, Can -> Could, May -> Might, Must -> Had to
+
+## 2. Trạng Từ Chỉ Thời Gian & Nơi Chốn
+- *now -> then, today -> that day, tomorrow -> the following day, yesterday -> the day before*.
+      `,
+      exercises: [
+        {
+          instruction: 'Choose the correct indirect reported statement.',
+          question: '"I am working on my thesis today," Linh said. -> Linh said she _____ on her thesis that day.',
+          questionType: QuestionType.MULTIPLE_CHOICE,
+          options: ['is working', 'was working', 'has worked', 'had been worked'],
+          correctAnswer: 'was working',
+          explanation: 'Present continuous ("am working") backshifts to past continuous ("was working").',
+          explanationVi: 'Hiện tại tiếp diễn lùi thì thành quá khứ tiếp diễn "was working".',
+          order: 1,
+        },
+        {
+          instruction: 'Fill in the blank with the backshifted auxiliary.',
+          question: 'He promised he _____ send the contract by Friday afternoon.',
+          questionType: QuestionType.FILL_BLANK,
+          options: null,
+          correctAnswer: 'would',
+          explanation: '"Will" backshifts to "would" in indirect speech.',
+          explanationVi: '"Will" lùi thì thành "would".',
+          order: 2,
+        },
+        {
+          instruction: 'Sentence correction: Fix the backshifting mistake.',
+          question: 'Minh said that he can speak German very fluently.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'can speak', correction: 'could speak' },
+          correctAnswer: 'could',
+          explanation: 'With past reporting verb "said", "can" must backshift to "could".',
+          explanationVi: 'Động từ dẫn "said" yêu cầu lùi thì "can" thành "could".',
+          order: 3,
+        },
+      ],
+    },
+
+    // 8. BASIC GRAMMAR (2 lessons)
     {
       slug: 'comparatives-and-superlatives',
       title: 'Comparatives & Superlatives',
       titleVi: 'So Sánh Hơn và So Sánh Nhất',
+      category: 'Basic Grammar',
+      categoryVi: 'Ngữ Pháp Căn Bản',
       summary: 'Forming comparisons for short and long adjectives and irregular forms.',
       level: EnglishLevel.INTERMEDIATE,
-      order: 8,
+      order: 13,
       content: `
 # So Sánh Hơn & So Sánh Nhất (Comparatives & Superlatives)
 
@@ -1215,7 +1590,6 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
 ## 3. Bất Quy Tắc
 - good -> better -> the best
 - bad -> worse -> the worst
-- far -> farther / further -> the farthest / furthest
       `,
       exercises: [
         {
@@ -1238,89 +1612,15 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           explanationVi: 'Dạng so sánh nhất bất quy tắc của "good" là "best".',
           order: 2,
         },
-      ],
-    },
-    {
-      slug: 'conditionals-type-1-2',
-      title: 'Conditionals: Type 1 & Type 2',
-      titleVi: 'Câu Điều Kiện: Loại 1 và Loại 2',
-      summary: 'Hypothetical situations versus real and probable future conditions.',
-      level: EnglishLevel.INTERMEDIATE,
-      order: 9,
-      content: `
-# Câu Điều Kiện Loại 1 & Loại 2
-
-## 1. Loại 1 (Có thật ở hiện tại hoặc tương lai)
-- **Cấu trúc**: If + S + V(hiện tại đơn), S + will + V(nguyên mẫu)
-- *Ví dụ*: If it rains this afternoon, we will stay at home.
-
-## 2. Loại 2 (Không có thật ở hiện tại, giả định trái ngược thực tế)
-- **Cấu trúc**: If + S + V2/ed (were cho mọi ngôi), S + would + V(nguyên mẫu)
-- *Ví dụ*: If I were you, I would accept that job offer immediately.
-      `,
-      exercises: [
         {
-          instruction: 'Select the correct verb form for Type 1 conditional.',
-          question: 'If you study consistently, you _____ the exam with high scores.',
-          questionType: QuestionType.MULTIPLE_CHOICE,
-          options: ['pass', 'will pass', 'would pass', 'passed'],
-          correctAnswer: 'will pass',
-          explanation: 'First conditional main clause uses "will + base verb".',
-          explanationVi: 'Mệnh đề chính của câu điều kiện loại 1 dùng "will + động từ nguyên mẫu".',
-          order: 1,
-        },
-        {
-          instruction: 'Fill in the blank with the hypothetical past subjunctive of "be".',
-          question: 'If I _____ you, I would take that scholarship opportunity.',
-          questionType: QuestionType.FILL_BLANK,
-          options: null,
-          correctAnswer: 'were',
-          explanation: 'In second conditional, "were" is conventionally used for all subjects.',
-          explanationVi: 'Trong câu điều kiện loại 2 giả định, "were" được dùng chuẩn mực cho tất cả các ngôi.',
-          order: 2,
-        },
-      ],
-    },
-    {
-      slug: 'passive-voice',
-      title: 'Passive Voice Across Tenses',
-      titleVi: 'Câu Bị Động Các Thì',
-      summary: 'Transforming active sentences into passive voice to emphasize the recipient of action.',
-      level: EnglishLevel.UPPER_INTERMEDIATE,
-      order: 10,
-      content: `
-# Câu Bị Động (Passive Voice)
-
-## 1. Nguyên Tắc Biến Đổi
-- Chủ ngữ của câu chủ động trở thành tân ngữ đứng sau "by" (hoặc lược bỏ).
-- Tân ngữ của câu chủ động trở thành chủ ngữ của câu bị động.
-- Cấu trúc chung: **Be + V3/ed** (động từ "Be" chia theo thì của câu gốc).
-
-## 2. Các Thì Cơ Bản
-- Hiện tại đơn: S + am/is/are + V3/ed
-- Quá khứ đơn: S + was/were + V3/ed
-- Hiện tại hoàn thành: S + have/has been + V3/ed
-      `,
-      exercises: [
-        {
-          instruction: 'Choose the correct passive verb phrase.',
-          question: 'The famous bridge _____ by skilled engineers in 1902.',
-          questionType: QuestionType.MULTIPLE_CHOICE,
-          options: ['built', 'was built', 'is built', 'has been built'],
-          correctAnswer: 'was built',
-          explanation: 'In 1902 denotes a past event in passive voice: "was built".',
-          explanationVi: 'Năm 1902 là mốc thời gian trong quá khứ, câu mang nghĩa bị động số ít nên dùng "was built".',
-          order: 1,
-        },
-        {
-          instruction: 'Fill in the past participle.',
-          question: 'English is _____ (speak) as an official language in many countries.',
-          questionType: QuestionType.FILL_BLANK,
-          options: null,
-          correctAnswer: 'spoken',
-          explanation: 'The past participle (V3) of "speak" is "spoken".',
-          explanationVi: 'Dạng phân từ hai (V3) của "speak" là "spoken".',
-          order: 2,
+          instruction: 'Sentence correction: Fix the double comparative error.',
+          question: 'This smartphone is more cheaper than the other brand.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'more cheaper', correction: 'cheaper' },
+          correctAnswer: 'cheaper',
+          explanation: '"Cheap" is a short adjective; use "cheaper", never "more cheaper".',
+          explanationVi: '"Cheap" là tính từ ngắn, so sánh hơn là "cheaper", không dùng "more cheaper".',
+          order: 3,
         },
       ],
     },
@@ -1328,9 +1628,11 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
       slug: 'relative-clauses',
       title: 'Relative Clauses: Who, Which, That, Whose',
       titleVi: 'Mệnh Đề Quan Hệ',
+      category: 'Basic Grammar',
+      categoryVi: 'Ngữ Pháp Căn Bản',
       summary: 'Connecting ideas seamlessly using relative pronouns and defining vs non-defining clauses.',
       level: EnglishLevel.UPPER_INTERMEDIATE,
-      order: 11,
+      order: 14,
       content: `
 # Mệnh Đề Quan Hệ (Relative Clauses)
 
@@ -1338,8 +1640,8 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
 - **Who**: Thay thế cho danh từ chỉ người làm chủ ngữ.
 - **Whom**: Thay thế cho danh từ chỉ người làm tân ngữ.
 - **Which**: Thay thế cho danh từ chỉ đồ vật, sự việc.
-- **That**: Thay thế cho cả người lẫn vật trong mệnh đề xác định (không dùng sau dấu phẩy).
-- **Whose**: Chỉ sự sở hữu cho cả người và vật (*whose father is a teacher*).
+- **That**: Thay thế cho cả người lẫn vật trong mệnh đề xác định.
+- **Whose**: Chỉ quan hệ sở hữu.
       `,
       exercises: [
         {
@@ -1362,13 +1664,25 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
           explanationVi: 'Quan hệ sở hữu (phát âm của bạn học sinh) đòi hỏi dùng đại từ sở hữu "whose".',
           order: 2,
         },
+        {
+          instruction: 'Sentence correction: Fix the relative pronoun error.',
+          question: 'The laptop who I bought last week has outstanding battery life.',
+          questionType: QuestionType.SENTENCE_CORRECTION,
+          options: { error: 'who', correction: 'which' },
+          correctAnswer: 'which',
+          explanation: '"Laptop" is a thing, so use relative pronoun "which" or "that", not "who".',
+          explanationVi: '"Laptop" là đồ vật, đại từ quan hệ thay thế phải là "which" hoặc "that", không dùng "who".',
+          order: 3,
+        },
       ],
     },
   ];
 
+  const createdGrammarLessons = new Map<string, string>();
   for (const lessonData of grammarLessonsData) {
     const { exercises, ...lessonFields } = lessonData;
     const lesson = await prisma.grammarLesson.create({ data: lessonFields });
+    createdGrammarLessons.set(lesson.slug, lesson.id);
     for (const ex of exercises) {
       await prisma.grammarExercise.create({
         data: {
@@ -1380,7 +1694,6 @@ Always, usually, often, sometimes, rarely, never, every day/week/month.
     }
   }
 
-  // ==============================================
   // 6. Seed Listening Lessons (5+ lessons)
   // ==============================================
   console.log('Seeding listening lessons...');
@@ -1690,17 +2003,18 @@ Kiến trúc xanh tích hợp thảm thực vật sống trực tiếp vào mặ
   // ==============================================
   // 8. Seed Quizzes & Questions (5+ quizzes)
   // ==============================================
-  console.log('Seeding quizzes and questions...');
+  console.log('Seeding quizzes and questions with all question types...');
   const quizzesData = [
     {
       title: 'Everyday Grammar Diagnostic Quiz',
-      description: 'Test your understanding of foundational English tenses and modal verbs.',
+      description: 'Comprehensive test covering foundational tenses, modal verbs, sentence ordering, and matching.',
       level: EnglishLevel.BEGINNER,
       difficulty: Difficulty.EASY,
       timeLimit: 15,
       passingScore: 70,
       listeningLessonSlug: null,
       readingArticleSlug: null,
+      grammarLessonSlug: 'present-simple-tense',
       questions: [
         {
           prompt: 'Every weekend, Nam _____ his bicycle around West Lake in Hanoi.',
@@ -1712,64 +2026,55 @@ Kiến trúc xanh tích hợp thảm thực vật sống trực tiếp vào mặ
             { id: 'd', text: 'has ridden' },
           ],
           correctAnswer: 'b',
-          explanation: 'Habitual action with subject "Nam" (third person singular) takes "rides".',
-          explanationVi: 'Hành động thói quen lặp lại với chủ ngữ số ít "Nam" cần chia động từ thêm "s": "rides".',
+          explanation: 'Habitual action with third person singular subject "Nam" takes "rides".',
+          explanationVi: 'Thói quen lặp lại với chủ ngữ số ít "Nam" cần chia động từ thêm "s": "rides".',
           points: 20,
         },
         {
-          prompt: 'They _____ visited Ha Long Bay twice this year.',
-          questionType: QuestionType.MULTIPLE_CHOICE,
+          prompt: 'The present continuous tense is often used to describe confirmed future arrangements.',
+          questionType: QuestionType.TRUE_FALSE,
           options: [
-            { id: 'a', text: 'have' },
-            { id: 'b', text: 'has' },
-            { id: 'c', text: 'did' },
-            { id: 'd', text: 'were' },
+            { id: 'true', text: 'True' },
+            { id: 'false', text: 'False' },
           ],
-          correctAnswer: 'a',
-          explanation: 'Subject "They" takes auxiliary "have" in Present Perfect.',
-          explanationVi: 'Chủ ngữ "They" đi với trợ động từ "have" trong thì hiện tại hoàn thành.',
+          correctAnswer: 'true',
+          explanation: 'Present continuous is standard for confirmed future appointments.',
+          explanationVi: 'Thì hiện tại tiếp diễn thường dùng để diễn tả kế hoạch chắc chắn trong tương lai gần.',
           points: 20,
         },
         {
-          prompt: 'You _____ not park your car in front of the hospital emergency entrance.',
-          questionType: QuestionType.MULTIPLE_CHOICE,
-          options: [
-            { id: 'a', text: 'might' },
-            { id: 'b', text: 'must' },
-            { id: 'c', text: 'could' },
-            { id: 'd', text: 'would' },
-          ],
-          correctAnswer: 'b',
-          explanation: 'Must not expresses strict prohibition.',
-          explanationVi: '"Must not" thể hiện mệnh lệnh cấm đoán nghiêm ngặt.',
+          prompt: 'Fill in the blank with the correct preposition: "Our tech firm was founded _____ 2021."',
+          questionType: QuestionType.FILL_BLANK,
+          options: null,
+          correctAnswer: 'in',
+          explanation: 'Calendar years require preposition "in".',
+          explanationVi: 'Các năm luôn đi kèm giới từ "in".',
           points: 20,
         },
         {
-          prompt: 'If it _____ tomorrow morning, we will cancel our outdoor soccer match.',
-          questionType: QuestionType.MULTIPLE_CHOICE,
-          options: [
-            { id: 'a', text: 'rain' },
-            { id: 'b', text: 'rains' },
-            { id: 'c', text: 'will rain' },
-            { id: 'd', text: 'rained' },
-          ],
-          correctAnswer: 'b',
-          explanation: 'In first conditional if-clause, use Present Simple (rains).',
-          explanationVi: 'Trong mệnh đề if của câu điều kiện loại 1, động từ chia ở thì hiện tại đơn: "rains".',
+          prompt: 'Match each modal verb with its intended function:',
+          questionType: QuestionType.MATCHING,
+          options: {
+            pairs: [
+              { leftId: '1', left: 'Must', rightId: 'a', right: 'Obligation / Legal requirement' },
+              { leftId: '2', left: 'Should', rightId: 'b', right: 'Friendly recommendation' },
+              { leftId: '3', left: 'Might', rightId: 'c', right: 'Low possibility' },
+            ],
+          },
+          correctAnswer: '1:a,2:b,3:c',
+          explanation: '"Must" indicates duty, "should" gives advice, and "might" expresses possibility.',
+          explanationVi: '"Must" là bắt buộc, "should" là lời khuyên, "might" chỉ khả năng.',
           points: 20,
         },
         {
-          prompt: 'The novel was written _____ a famous Vietnamese author in 1936.',
-          questionType: QuestionType.MULTIPLE_CHOICE,
-          options: [
-            { id: 'a', text: 'with' },
-            { id: 'b', text: 'by' },
-            { id: 'c', text: 'for' },
-            { id: 'd', text: 'from' },
-          ],
-          correctAnswer: 'b',
-          explanation: 'In passive voice, the agent is introduced by preposition "by".',
-          explanationVi: 'Trong câu bị động, tác nhân thực hiện hành động được mở đầu bằng giới từ "by".',
+          prompt: 'Rearrange the words to form a grammatically correct sentence:',
+          questionType: QuestionType.SENTENCE_ORDERING,
+          options: {
+            tokens: ['She', 'usually', 'drinks', 'green tea', 'every morning'],
+          },
+          correctAnswer: 'She usually drinks green tea every morning',
+          explanation: 'Adverbs of frequency appear between the subject and the main verb.',
+          explanationVi: 'Trạng từ chỉ tần suất đứng giữa chủ ngữ và động từ chính.',
           points: 20,
         },
       ],
@@ -1783,6 +2088,7 @@ Kiến trúc xanh tích hợp thảm thực vật sống trực tiếp vào mặ
       passingScore: 75,
       listeningLessonSlug: 'ordering-coffee-in-london',
       readingArticleSlug: null,
+      grammarLessonSlug: null,
       questions: [
         {
           prompt: 'What kind of milk did the customer order in their latte?',
@@ -1813,17 +2119,15 @@ Kiến trúc xanh tích hợp thảm thực vật sống trực tiếp vào mặ
           points: 35,
         },
         {
-          prompt: 'How did the customer pay for the order?',
-          questionType: QuestionType.MULTIPLE_CHOICE,
+          prompt: 'The customer chose to pay in cash.',
+          questionType: QuestionType.TRUE_FALSE,
           options: [
-            { id: 'a', text: 'Cash' },
-            { id: 'b', text: 'Contactless card' },
-            { id: 'c', text: 'Mobile gift voucher' },
-            { id: 'd', text: 'Bank transfer' },
+            { id: 'true', text: 'True' },
+            { id: 'false', text: 'False' },
           ],
-          correctAnswer: 'b',
-          explanation: 'The customer confirmed payment with contactless card.',
-          explanationVi: 'Khách hàng lựa chọn phương thức thanh toán bằng thẻ chạm: "contactless card".',
+          correctAnswer: 'false',
+          explanation: 'The customer confirmed payment with contactless card, not cash.',
+          explanationVi: 'Khách hàng đã thanh toán bằng thẻ chạm (contactless card), không phải tiền mặt.',
           points: 30,
         },
       ],
@@ -1837,6 +2141,7 @@ Kiến trúc xanh tích hợp thảm thực vật sống trực tiếp vào mặ
       passingScore: 70,
       listeningLessonSlug: null,
       readingArticleSlug: 'vietnam-coffee-culture',
+      grammarLessonSlug: null,
       questions: [
         {
           prompt: 'What is Vietnam’s global ranking in terms of total coffee export volume?',
@@ -1891,6 +2196,7 @@ Kiến trúc xanh tích hợp thảm thực vật sống trực tiếp vào mặ
       passingScore: 70,
       listeningLessonSlug: null,
       readingArticleSlug: 'benefits-of-bilingualism',
+      grammarLessonSlug: null,
       questions: [
         {
           prompt: 'According to studies cited in the text, by how many years can bilingualism delay Alzheimer symptoms?',
@@ -1938,13 +2244,14 @@ Kiến trúc xanh tích hợp thảm thực vật sống trực tiếp vào mặ
     },
     {
       title: 'General Intermediate English Proficiency Assessment',
-      description: 'Comprehensive test covering vocabulary, prepositions, collocations, and reading context.',
+      description: 'Comprehensive test covering vocabulary, prepositions, collocations, and sentence structures.',
       level: EnglishLevel.INTERMEDIATE,
       difficulty: Difficulty.MEDIUM,
       timeLimit: 20,
       passingScore: 75,
       listeningLessonSlug: null,
       readingArticleSlug: null,
+      grammarLessonSlug: null,
       questions: [
         {
           prompt: 'Choose the word that means "to discuss formally to reach an agreement":',
@@ -1958,7 +2265,7 @@ Kiến trúc xanh tích hợp thảm thực vật sống trực tiếp vào mặ
           correctAnswer: 'b',
           explanation: 'To negotiate means to discuss terms formally in business or diplomacy.',
           explanationVi: '"Negotiate" có nghĩa là đàm phán, thương lượng.',
-          points: 25,
+          points: 20,
         },
         {
           prompt: 'Select the correct preposition: "She is capable _____ speaking three languages fluently."',
@@ -1972,35 +2279,39 @@ Kiến trúc xanh tích hợp thảm thực vật sống trực tiếp vào mặ
           correctAnswer: 'c',
           explanation: 'The adjective "capable" is followed by the preposition "of".',
           explanationVi: 'Tính từ "capable" đi kèm giới từ "of" (capable of doing something).',
-          points: 25,
+          points: 20,
         },
         {
-          prompt: 'Which word describes energy sources that naturally replenish, like solar and wind?',
-          questionType: QuestionType.MULTIPLE_CHOICE,
+          prompt: 'Renewable energy comes from sources like solar and wind that naturally replenish.',
+          questionType: QuestionType.TRUE_FALSE,
           options: [
-            { id: 'a', text: 'Exhaustible' },
-            { id: 'b', text: 'Renewable' },
-            { id: 'c', text: 'Synthetic' },
-            { id: 'd', text: 'Radioactive' },
+            { id: 'true', text: 'True' },
+            { id: 'false', text: 'False' },
           ],
-          correctAnswer: 'b',
-          explanation: 'Renewable energy comes from natural resources that replenish continuously.',
-          explanationVi: '"Renewable" nghĩa là năng lượng tái tạo (mặt trời, gió, thủy triều).',
-          points: 25,
+          correctAnswer: 'true',
+          explanation: 'Renewable energy is derived from natural resources that constantly regenerate.',
+          explanationVi: 'Năng lượng tái tạo xuất phát từ các nguồn tự nhiên tự phục hồi liên tục.',
+          points: 20,
         },
         {
-          prompt: 'Complete the conditional: "If he had arrived earlier, he _____ the train."',
-          questionType: QuestionType.MULTIPLE_CHOICE,
-          options: [
-            { id: 'a', text: 'would not miss' },
-            { id: 'b', text: 'would not have missed' },
-            { id: 'c', text: 'will not miss' },
-            { id: 'd', text: 'has not missed' },
-          ],
-          correctAnswer: 'b',
-          explanation: 'Third conditional requires "would (not) have + past participle".',
-          explanationVi: 'Câu điều kiện loại 3 giả định quá khứ dùng "would not have missed".',
-          points: 25,
+          prompt: 'Complete the conditional: "If he had arrived earlier, he _____ (not miss) the train."',
+          questionType: QuestionType.FILL_BLANK,
+          options: null,
+          correctAnswer: 'would not have missed',
+          explanation: 'Third conditional requires "would not have + past participle".',
+          explanationVi: 'Câu điều kiện loại 3 dùng "would not have missed".',
+          points: 20,
+        },
+        {
+          prompt: 'Arrange the tokens into an accurate sentence:',
+          questionType: QuestionType.SENTENCE_ORDERING,
+          options: {
+            tokens: ['The new library', 'was built', 'in 2022', 'by local workers'],
+          },
+          correctAnswer: 'The new library was built in 2022 by local workers',
+          explanation: 'Standard passive word order: Subject + was built + time phrase + by agent.',
+          explanationVi: 'Cấu trúc câu bị động chuẩn: Chủ ngữ + was built + cụm thời gian + by tác nhân.',
+          points: 20,
         },
       ],
     },
@@ -2008,12 +2319,16 @@ Kiến trúc xanh tích hợp thảm thực vật sống trực tiếp vào mặ
 
   const createdQuizzes: { id: string; title: string }[] = [];
   for (const quizItem of quizzesData) {
-    const { questions, listeningLessonSlug, readingArticleSlug, ...quizFields } = quizItem;
+    const item = quizItem as any;
+    const { questions, listeningLessonSlug, readingArticleSlug, grammarLessonSlug, ...quizFields } = item;
     const listeningLessonId = listeningLessonSlug
       ? createdListeningLessons.get(listeningLessonSlug) ?? null
       : null;
     const readingArticleId = readingArticleSlug
       ? createdReadingArticles.get(readingArticleSlug) ?? null
+      : null;
+    const grammarLessonId = grammarLessonSlug
+      ? createdGrammarLessons.get(grammarLessonSlug) ?? null
       : null;
 
     const quiz = await prisma.quiz.create({
@@ -2021,6 +2336,7 @@ Kiến trúc xanh tích hợp thảm thực vật sống trực tiếp vào mặ
         ...quizFields,
         listeningLessonId,
         readingArticleId,
+        grammarLessonId,
       },
     });
     createdQuizzes.push({ id: quiz.id, title: quiz.title });

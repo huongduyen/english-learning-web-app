@@ -236,6 +236,8 @@ model ListeningLesson {
   title        String
   titleVi      String
   description  String?
+  topic        String?
+  difficulty   Difficulty   @default(EASY)
   audioUrl     String
   duration     Int?         // Duration in seconds
   transcript   String       @db.Text
@@ -248,6 +250,7 @@ model ListeningLesson {
 
   @@index([slug])
   @@index([level])
+  @@index([difficulty])
   @@map("listening_lessons")
 }
 
@@ -257,6 +260,8 @@ model ReadingArticle {
   title       String
   titleVi     String
   summary     String?
+  topic       String?
+  difficulty  Difficulty   @default(EASY)
   content     String       @db.Text
   contentVi   String?      @db.Text
   level       EnglishLevel @default(BEGINNER)
@@ -268,6 +273,7 @@ model ReadingArticle {
 
   @@index([slug])
   @@index([level])
+  @@index([difficulty])
   @@map("reading_articles")
 }
 

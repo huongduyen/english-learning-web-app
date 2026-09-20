@@ -8,7 +8,6 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ProfilePage } from './pages/ProfilePage';
-import { ModulePlaceholderPage } from './pages/ModulePlaceholderPage';
 import { VocabularyListPage } from './pages/VocabularyListPage';
 import { VocabularyDetailPage } from './pages/VocabularyDetailPage';
 import { FlashcardsPage } from './pages/FlashcardsPage';
@@ -16,6 +15,10 @@ import { GrammarListPage } from './pages/GrammarListPage';
 import { GrammarLessonPage } from './pages/GrammarLessonPage';
 import { QuizzesListPage } from './pages/QuizzesListPage';
 import { QuizPlayerPage } from './pages/QuizPlayerPage';
+import { ListeningListPage } from './pages/ListeningListPage';
+import { ListeningLessonPage } from './pages/ListeningLessonPage';
+import { ReadingListPage } from './pages/ReadingListPage';
+import { ReadingArticlePage } from './pages/ReadingArticlePage';
 import { CheckCircle2, Server, Globe, Database, Shield, ArrowRight } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -265,11 +268,15 @@ export const App: React.FC = () => {
         path="/listening"
         element={
           <ProtectedRoute>
-            <ModulePlaceholderPage
-              category="Listening"
-              title="Listening Comprehension"
-              description="Improve your audio listening skills with native accents, transcripts, and comprehension quizzes."
-            />
+            <ListeningListPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/listening/:id"
+        element={
+          <ProtectedRoute>
+            <ListeningLessonPage />
           </ProtectedRoute>
         }
       />
@@ -277,11 +284,15 @@ export const App: React.FC = () => {
         path="/reading"
         element={
           <ProtectedRoute>
-            <ModulePlaceholderPage
-              category="Reading"
-              title="Reading Comprehension"
-              description="Explore engaging articles and stories curated for your English proficiency level."
-            />
+            <ReadingListPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reading/:id"
+        element={
+          <ProtectedRoute>
+            <ReadingArticlePage />
           </ProtectedRoute>
         }
       />

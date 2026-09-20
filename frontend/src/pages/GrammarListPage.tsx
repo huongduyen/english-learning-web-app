@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Navbar } from '../components/Navbar';
 import { grammarApi } from '../services/grammarApi';
@@ -11,6 +12,7 @@ import {
   Filter,
   Sparkles,
   RotateCcw,
+  ArrowLeft,
 } from 'lucide-react';
 
 export const GrammarListPage: React.FC = () => {
@@ -62,6 +64,18 @@ export const GrammarListPage: React.FC = () => {
       <Navbar />
 
       <main className="container mx-auto max-w-6xl flex-1 px-4 py-8 sm:px-6">
+        {/* Navigation Breadcrumb */}
+        <div className="mb-6 flex items-center justify-between">
+          <Link
+            to="/dashboard"
+            id="back-to-dashboard-link"
+            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Link>
+        </div>
+
         {/* Page Hero */}
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>

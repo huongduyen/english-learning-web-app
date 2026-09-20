@@ -67,7 +67,7 @@ export const DashboardPage: React.FC = () => {
     <div className="flex min-h-screen flex-col bg-background">
       <Navbar />
 
-      <main className="container mx-auto max-w-5xl flex-1 space-y-8 px-4 py-8 sm:px-6">
+      <main className="container mx-auto max-w-5xl flex-1 space-y-8 px-4 py-8 sm:px-6 min-w-0">
         {/* 1. Welcome Section */}
         <WelcomeSection user={currentUser} isLoading={isProfileLoading} />
 
@@ -84,9 +84,9 @@ export const DashboardPage: React.FC = () => {
         <QuickActions />
 
         {/* 4. Continue Learning & 5. Recent Activity Layout */}
-        <div className="grid gap-8 lg:grid-cols-12">
+        <div className="grid gap-8 lg:grid-cols-12 min-w-0">
           {/* Continue Learning */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 min-w-0">
             <ContinueLearning
               items={continueItems}
               isLoading={isContinueLoading}
@@ -96,7 +96,7 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {/* Recent Activity */}
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 min-w-0">
             <RecentActivity
               activities={recentActivities}
               isLoading={isActivitiesLoading}

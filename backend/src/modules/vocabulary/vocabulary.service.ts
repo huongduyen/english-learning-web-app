@@ -1,12 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AchievementsService } from '../achievements/achievements.service';
+import { DailyGoalsService } from '../daily-goals/daily-goals.service';
 import { VocabularyQueryDto } from './dto/vocabulary-query.dto';
 import { ReviewVocabularyDto } from './dto/review-vocabulary.dto';
 import { ActivityType, Prisma, VocabularyStatus } from '@prisma/client';
 
 @Injectable()
 export class VocabularyService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Optional() private readonly achievementsService?: AchievementsService,
+    @Optional() private readonly dailyGoalsService?: DailyGoalsService,
+  ) {}
 
   async findAll(query: VocabularyQueryDto, userId?: string) {
     const {
@@ -221,6 +227,14 @@ export class VocabularyService {
       data: { totalXp: { increment: 5 } },
     });
 
+    if (this.dailyGoalsService) {
+      await this.dailyGoalsService.recordActivity(userId, { minutes: 2, words: 1 });
+    }
+
+    if (this.achievementsService) {
+      await this.achievementsService.checkAndUnlockAchievements(userId);
+    }
+
     return userVocabulary;
   }
 
@@ -294,6 +308,14 @@ export class VocabularyService {
         where: { userId },
         data: { totalXp: { increment: 10 } },
       });
+    }
+
+    if (this.dailyGoalsService) {
+      await this.dailyGoalsService.recordActivity(userId, { minutes: 1, words: isCorrect ? 1 : 0 });
+    }
+
+    if (this.achievementsService) {
+      await this.achievementsService.checkAndUnlockAchievements(userId);
     }
 
     return userVocabulary;

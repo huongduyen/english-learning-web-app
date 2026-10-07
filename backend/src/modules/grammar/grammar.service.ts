@@ -1,5 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AchievementsService } from '../achievements/achievements.service';
+import { DailyGoalsService } from '../daily-goals/daily-goals.service';
 import { GrammarQueryDto } from './dto/grammar-query.dto';
 import { SubmitGrammarExerciseDto } from './dto/submit-exercise.dto';
 import { ActivityType, Prisma } from '@prisma/client';
@@ -87,7 +89,11 @@ export const GRAMMAR_CATEGORIES: Array<{
 
 @Injectable()
 export class GrammarService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Optional() private readonly achievementsService?: AchievementsService,
+    @Optional() private readonly dailyGoalsService?: DailyGoalsService,
+  ) {}
 
   async findAll(query: GrammarQueryDto) {
     const { page = 1, limit = 20, search, level, category } = query;
@@ -279,6 +285,14 @@ export class GrammarService {
       where: { userId },
       data: { totalXp: { increment: xpEarned } },
     });
+
+    if (this.dailyGoalsService) {
+      await this.dailyGoalsService.recordActivity(userId, { minutes: 5 });
+    }
+
+    if (this.achievementsService) {
+      await this.achievementsService.checkAndUnlockAchievements(userId);
+    }
 
     return {
       lessonId: lesson.id,

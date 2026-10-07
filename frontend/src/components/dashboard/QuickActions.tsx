@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, BookA, Headphones, BookMarked, ArrowRight } from 'lucide-react';
+import { BookOpen, BookA, Headphones, BookMarked, Trophy, TrendingUp, ArrowRight } from 'lucide-react';
 
 interface QuickActionItem {
   id: string;
@@ -39,6 +39,20 @@ const ACTIONS: QuickActionItem[] = [
     description: 'Articles & stories',
     icon: <BookMarked className="h-5 w-5 text-amber-500" />,
   },
+  {
+    id: 'quick-action-quizzes',
+    name: 'Quizzes',
+    to: '/quizzes',
+    description: 'Test comprehension',
+    icon: <Trophy className="h-5 w-5 text-rose-500" />,
+  },
+  {
+    id: 'quick-action-progress',
+    name: 'Progress',
+    to: '/progress',
+    description: 'Stats & achievements',
+    icon: <TrendingUp className="h-5 w-5 text-indigo-500" />,
+  },
 ];
 
 export const QuickActions: React.FC = () => {
@@ -54,7 +68,7 @@ export const QuickActions: React.FC = () => {
         Choose a skill to begin practicing today
       </p>
 
-      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         {ACTIONS.map((action) => (
           <Link
             key={action.id}

@@ -19,6 +19,7 @@ import { ListeningListPage } from './pages/ListeningListPage';
 import { ListeningLessonPage } from './pages/ListeningLessonPage';
 import { ReadingListPage } from './pages/ReadingListPage';
 import { ReadingArticlePage } from './pages/ReadingArticlePage';
+import { ProgressPage } from './pages/ProgressPage';
 import { CheckCircle2, Server, Globe, Database, Shield, ArrowRight } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -205,6 +206,14 @@ export const App: React.FC = () => {
         element={
           <ProtectedRoute>
             <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/progress"
+        element={
+          <ProtectedRoute>
+            <ProgressPage />
           </ProtectedRoute>
         }
       />

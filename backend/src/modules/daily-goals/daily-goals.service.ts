@@ -94,4 +94,51 @@ export class DailyGoalsService {
 
     return updated;
   }
+
+  /**
+   * Automatically update today's daily goal progress when an activity occurs.
+   */
+  async recordActivity(
+    userId: string,
+    activity: { minutes?: number; words?: number },
+  ) {
+    if (!userId) return null;
+
+    const todayGoal = await this.getTodayGoal(userId);
+    const addedMinutes = Math.max(0, activity.minutes || 0);
+    const addedWords = Math.max(0, activity.words || 0);
+
+    const newActualMinutes = todayGoal.actualMinutes + addedMinutes;
+    const newActualWords = todayGoal.actualWords + addedWords;
+
+    const isNewlyCompleted =
+      !todayGoal.completed &&
+      newActualMinutes >= todayGoal.targetMinutes &&
+      newActualWords >= todayGoal.targetWords;
+
+    const completed =
+      todayGoal.completed ||
+      (newActualMinutes >= todayGoal.targetMinutes &&
+        newActualWords >= todayGoal.targetWords);
+
+    const updatedGoal = await this.prisma.dailyGoal.update({
+      where: { id: todayGoal.id },
+      data: {
+        actualMinutes: newActualMinutes,
+        actualWords: newActualWords,
+        completed,
+      },
+    });
+
+    if (isNewlyCompleted) {
+      await this.prisma.userProfile.updateMany({
+        where: { userId },
+        data: {
+          totalXp: { increment: 25 },
+        },
+      });
+    }
+
+    return updatedGoal;
+  }
 }

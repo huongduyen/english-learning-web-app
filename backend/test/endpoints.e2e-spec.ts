@@ -284,6 +284,35 @@ describe('Phase 3 Core REST API - Versioned /api/v1 (e2e)', () => {
       expect(res.body).toHaveProperty('pagination');
       expect(Array.isArray(res.body.data)).toBe(true);
     });
+
+    it('GET /api/v1/progress/weekly - get 7-day weekly activity breakdown', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/api/v1/progress/weekly')
+        .expect(200);
+
+      expect(Array.isArray(res.body)).toBe(true);
+      expect(res.body.length).toBe(7);
+      expect(res.body[0]).toHaveProperty('date');
+      expect(res.body[0]).toHaveProperty('minutes');
+      expect(res.body[0]).toHaveProperty('day');
+    });
+
+    it('POST /api/v1/progress/activity - log learning activity and trigger achievements', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/api/v1/progress/activity')
+        .send({
+          type: 'VOCABULARY',
+          durationMinutes: 10,
+          wordsLearned: 2,
+          metadata: { note: 'Completed 2 flashcards' },
+        })
+        .expect(201);
+
+      expect(res.body).toHaveProperty('activity');
+      expect(res.body.activity.type).toBe('VOCABULARY');
+      expect(res.body.activity.durationMinutes).toBe(10);
+      expect(res.body).toHaveProperty('newlyUnlockedAchievements');
+    });
   });
 
   describe('Daily Goals Endpoints (/api/v1/daily-goals)', () => {

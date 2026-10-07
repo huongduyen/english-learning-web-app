@@ -1,12 +1,18 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AchievementsService } from '../achievements/achievements.service';
+import { DailyGoalsService } from '../daily-goals/daily-goals.service';
 import { ReadingQueryDto } from './dto/reading-query.dto';
 import { SubmitReadingDto } from './dto/submit-reading.dto';
 import { ActivityType, Prisma } from '@prisma/client';
 
 @Injectable()
 export class ReadingService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Optional() private readonly achievementsService?: AchievementsService,
+    @Optional() private readonly dailyGoalsService?: DailyGoalsService,
+  ) {}
 
   async findAll(query: ReadingQueryDto, userId?: string) {
     const { page = 1, limit = 20, search, level, difficulty, topic } = query;
@@ -336,6 +342,22 @@ export class ReadingService {
       where: { userId },
       data: { totalXp: { increment: xpReward } },
     });
+
+    // 4. Update daily goal and check achievements
+    const readingMins = Math.max(
+      1,
+      Math.round(
+        (dto.durationSeconds ||
+          (article.readingTime ? article.readingTime * 60 : 300)) / 60,
+      ),
+    );
+    if (this.dailyGoalsService) {
+      await this.dailyGoalsService.recordActivity(userId, { minutes: readingMins });
+    }
+
+    if (this.achievementsService) {
+      await this.achievementsService.checkAndUnlockAchievements(userId);
+    }
 
     return {
       attemptId: attempt.id,

@@ -98,10 +98,7 @@ export class DailyGoalsService {
   /**
    * Automatically update today's daily goal progress when an activity occurs.
    */
-  async recordActivity(
-    userId: string,
-    activity: { minutes?: number; words?: number },
-  ) {
+  async recordActivity(userId: string, activity: { minutes?: number; words?: number }) {
     if (!userId) return null;
 
     const todayGoal = await this.getTodayGoal(userId);

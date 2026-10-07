@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException, Optional } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  Optional,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AchievementsService } from '../achievements/achievements.service';
 import { DailyGoalsService } from '../daily-goals/daily-goals.service';
@@ -347,8 +352,8 @@ export class ReadingService {
     const readingMins = Math.max(
       1,
       Math.round(
-        (dto.durationSeconds ||
-          (article.readingTime ? article.readingTime * 60 : 300)) / 60,
+        (dto.durationSeconds || (article.readingTime ? article.readingTime * 60 : 300)) /
+          60,
       ),
     );
     if (this.dailyGoalsService) {

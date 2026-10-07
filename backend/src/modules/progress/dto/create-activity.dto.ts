@@ -7,12 +7,17 @@ export class CreateActivityDto {
   @IsEnum(ActivityType)
   type: ActivityType;
 
-  @ApiPropertyOptional({ description: 'ID or slug of associated lesson, article, or topic' })
+  @ApiPropertyOptional({
+    description: 'ID or slug of associated lesson, article, or topic',
+  })
   @IsOptional()
   @IsString()
   referenceId?: string;
 
-  @ApiPropertyOptional({ description: 'Duration spent on this activity in minutes', default: 1 })
+  @ApiPropertyOptional({
+    description: 'Duration spent on this activity in minutes',
+    default: 1,
+  })
   @IsOptional()
   @IsNumber()
   @Min(0)
@@ -24,7 +29,9 @@ export class CreateActivityDto {
   @Min(0)
   score?: number;
 
-  @ApiPropertyOptional({ description: 'Number of words learned or reviewed during activity' })
+  @ApiPropertyOptional({
+    description: 'Number of words learned or reviewed during activity',
+  })
   @IsOptional()
   @IsNumber()
   @Min(0)

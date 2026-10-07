@@ -169,7 +169,9 @@ export class AchievementsService implements OnModuleInit {
           },
         });
       }
-      this.logger.log('Standard achievements verified and seeded successfully in PostgreSQL.');
+      this.logger.log(
+        'Standard achievements verified and seeded successfully in PostgreSQL.',
+      );
     } catch (error) {
       this.logger.error('Failed to seed standard achievements:', error);
     }
@@ -220,13 +222,15 @@ export class AchievementsService implements OnModuleInit {
    * Automatic Achievement Evaluation Engine.
    * Evaluates user's real activities in PostgreSQL and unlocks badges automatically.
    */
-  async checkAndUnlockAchievements(userId: string): Promise<Array<{
-    achievementId: string;
-    code: string;
-    title: string;
-    points: number;
-    newlyUnlocked: boolean;
-  }>> {
+  async checkAndUnlockAchievements(userId: string): Promise<
+    Array<{
+      achievementId: string;
+      code: string;
+      title: string;
+      points: number;
+      newlyUnlocked: boolean;
+    }>
+  > {
     if (!userId) return [];
 
     // 1. Gather all real data from PostgreSQL
@@ -301,7 +305,9 @@ export class AchievementsService implements OnModuleInit {
       this.prisma.userAchievement.findMany({ where: { userId } }),
     ]);
 
-    const userAchMap = new Map(existingUserAchievements.map((ua) => [ua.achievementId, ua]));
+    const userAchMap = new Map(
+      existingUserAchievements.map((ua) => [ua.achievementId, ua]),
+    );
     const results: Array<{
       achievementId: string;
       code: string;

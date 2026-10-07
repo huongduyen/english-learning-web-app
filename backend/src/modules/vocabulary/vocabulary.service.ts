@@ -311,7 +311,10 @@ export class VocabularyService {
     }
 
     if (this.dailyGoalsService) {
-      await this.dailyGoalsService.recordActivity(userId, { minutes: 1, words: isCorrect ? 1 : 0 });
+      await this.dailyGoalsService.recordActivity(userId, {
+        minutes: 1,
+        words: isCorrect ? 1 : 0,
+      });
     }
 
     if (this.achievementsService) {

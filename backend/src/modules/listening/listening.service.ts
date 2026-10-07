@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException, Optional } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  Optional,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AchievementsService } from '../achievements/achievements.service';
 import { DailyGoalsService } from '../daily-goals/daily-goals.service';

@@ -128,7 +128,7 @@ export interface LearningActivityItem {
   referenceId: string | null;
   durationMinutes: number;
   score: number | null;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   createdAt: string;
 }
 
@@ -148,5 +148,5 @@ export interface CreateActivityPayload {
   durationMinutes?: number;
   score?: number;
   wordsLearned?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

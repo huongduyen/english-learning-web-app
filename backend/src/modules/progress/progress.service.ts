@@ -17,7 +17,9 @@ export class ProgressService {
   /**
    * Calculate current streak and longest streak accurately from real database dates.
    */
-  async calculateStreak(userId: string): Promise<{ currentStreak: number; longestStreak: number }> {
+  async calculateStreak(
+    userId: string,
+  ): Promise<{ currentStreak: number; longestStreak: number }> {
     const [activities, goals, userProfile] = await Promise.all([
       this.prisma.learningActivity.findMany({
         where: { userId },
@@ -84,7 +86,8 @@ export class ProgressService {
     // 2. Calculate current streak (ending today or yesterday)
     const now = new Date();
     const todayEpochDay = Math.floor(
-      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) / (24 * 60 * 60 * 1000),
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) /
+        (24 * 60 * 60 * 1000),
     );
 
     const todayStr = now.toISOString().split('T')[0];
@@ -145,7 +148,8 @@ export class ProgressService {
     }
 
     const durationMinutes = dto.durationMinutes ?? 1;
-    const wordsLearned = dto.wordsLearned ?? (dto.type === ActivityType.VOCABULARY ? 1 : 0);
+    const wordsLearned =
+      dto.wordsLearned ?? (dto.type === ActivityType.VOCABULARY ? 1 : 0);
 
     // 1. Create Learning Activity record in PostgreSQL
     const activity = await this.prisma.learningActivity.create({
@@ -176,7 +180,8 @@ export class ProgressService {
     await this.calculateStreak(userId);
 
     // 5. Automatically check and unlock achievements in PostgreSQL
-    const newlyUnlocked = await this.achievementsService.checkAndUnlockAchievements(userId);
+    const newlyUnlocked =
+      await this.achievementsService.checkAndUnlockAchievements(userId);
 
     return {
       activity,
@@ -216,7 +221,9 @@ export class ProgressService {
     }> = [];
 
     // 7 days ending today
-    const startDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 6));
+    const startDate = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 6),
+    );
     startDate.setUTCHours(0, 0, 0, 0);
 
     const [activities, goals, profile] = await Promise.all([
@@ -240,7 +247,9 @@ export class ProgressService {
     const targetMinutes = profile?.dailyGoalMinutes || 15;
 
     for (let i = 6; i >= 0; i--) {
-      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - i));
+      const d = new Date(
+        Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - i),
+      );
       const dateStr = d.toISOString().split('T')[0];
       const dayOfWeek = d.getUTCDay();
 
@@ -262,7 +271,9 @@ export class ProgressService {
       // Estimate words learned
       let wordsCount = dayGoal?.actualWords || 0;
       if (wordsCount === 0) {
-        wordsCount = dayActivities.filter((a) => a.type === ActivityType.VOCABULARY).length;
+        wordsCount = dayActivities.filter(
+          (a) => a.type === ActivityType.VOCABULARY,
+        ).length;
       }
 
       const isToday = dateStr === todayDateStr;
@@ -366,8 +377,7 @@ export class ProgressService {
     const totalStudyMinutes = activitiesAgg._sum.durationMinutes || 0;
     const hours = Math.floor(totalStudyMinutes / 60);
     const mins = totalStudyMinutes % 60;
-    const totalLearningTimeFormatted =
-      hours > 0 ? `${hours}h ${mins}m` : `${mins} mins`;
+    const totalLearningTimeFormatted = hours > 0 ? `${hours}h ${mins}m` : `${mins} mins`;
 
     // 5. Skill lessons & progress
     const [

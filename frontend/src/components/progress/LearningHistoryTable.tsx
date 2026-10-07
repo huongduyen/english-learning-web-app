@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { progressApi } from '../../services/progressApi';
 import { ActivityType } from '../../types/dashboard';
+import { LearningActivityItem } from '../../types/progress';
 import {
   History,
   BookOpen,
@@ -54,12 +55,13 @@ export const LearningHistoryTable: React.FC = () => {
     }
   };
 
-  const getActivityTitle = (act: any): string => {
-    if (act.metadata?.quizTitle) return act.metadata.quizTitle;
-    if (act.metadata?.lessonTitle) return act.metadata.lessonTitle;
-    if (act.metadata?.articleTitle) return act.metadata.articleTitle;
-    if (act.metadata?.word) return `Vocabulary word: "${act.metadata.word}"`;
-    if (act.metadata?.action) return `Vocabulary ${act.metadata.action}`;
+  const getActivityTitle = (act: LearningActivityItem): string => {
+    const meta = act.metadata as Record<string, string | undefined> | null;
+    if (meta?.quizTitle) return meta.quizTitle;
+    if (meta?.lessonTitle) return meta.lessonTitle;
+    if (meta?.articleTitle) return meta.articleTitle;
+    if (meta?.word) return `Vocabulary word: "${meta.word}"`;
+    if (meta?.action) return `Vocabulary ${meta.action}`;
     return `${act.type.charAt(0) + act.type.slice(1).toLowerCase()} Practice`;
   };
 

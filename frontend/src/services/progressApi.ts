@@ -4,7 +4,9 @@ import {
   WeeklyActivityDay,
   LearningActivityListResponse,
   CreateActivityPayload,
+  LearningActivityItem,
 } from '../types/progress';
+import { AchievementItem } from '../types/achievements';
 import { ActivityType, ContinueLearningItem } from '../types/dashboard';
 
 export const progressApi = {
@@ -43,7 +45,7 @@ export const progressApi = {
    */
   logActivity: async (
     payload: CreateActivityPayload
-  ): Promise<{ activity: any; newlyUnlockedAchievements: any[] }> => {
+  ): Promise<{ activity: LearningActivityItem; newlyUnlockedAchievements: AchievementItem[] }> => {
     return apiClient.post('/progress/activity', payload);
   },
 

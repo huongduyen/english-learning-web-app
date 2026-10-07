@@ -17,7 +17,8 @@ export class ProgressController {
   @ApiOperation({ summary: 'Get current user overall learning progress and statistics' })
   @ApiResponse({
     status: 200,
-    description: 'Summary statistics including XP, streak, vocabularies, skills, and quizzes',
+    description:
+      'Summary statistics including XP, streak, vocabularies, skills, and quizzes',
   })
   async getProgress(@CurrentUser() userId: string) {
     return this.progressService.getUserProgress(userId);
@@ -25,7 +26,10 @@ export class ProgressController {
 
   @Get('weekly')
   @ApiOperation({ summary: 'Get 7-day weekly activity breakdown for charting' })
-  @ApiResponse({ status: 200, description: 'List of past 7 days study minutes and activities' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of past 7 days study minutes and activities',
+  })
   async getWeekly(@CurrentUser() userId: string) {
     return this.progressService.getWeeklyActivity(userId);
   }

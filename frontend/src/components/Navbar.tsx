@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
 import { useAuthStore } from '../store/useAuthStore';
@@ -13,9 +13,11 @@ import {
   LayoutDashboard,
   Headphones,
   BookMarked,
+  TrendingUp,
   Menu,
   X,
   ChevronRight,
+  ChevronDown,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -24,16 +26,33 @@ export const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [skillsOpen, setSkillsOpen] = useState(false);
+  const skillsRef = useRef<HTMLDivElement>(null);
 
-  // Close mobile menu on route changes
+  // Close menus on route changes
   useEffect(() => {
     setMobileOpen(false);
+    setSkillsOpen(false);
   }, [location.pathname]);
 
-  // Close mobile menu on Escape key
+  // Close menus on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (skillsRef.current && !skillsRef.current.contains(e.target as Node)) {
+        setSkillsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Close menus on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMobileOpen(false);
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+        setSkillsOpen(false);
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -41,6 +60,7 @@ export const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     setMobileOpen(false);
+    setSkillsOpen(false);
     await logout();
     navigate('/login');
   };
@@ -53,11 +73,56 @@ export const Navbar: React.FC = () => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
 
+  const isSkillsActive =
+    isActive('/vocabulary') ||
+    isActive('/grammar') ||
+    isActive('/listening') ||
+    isActive('/reading');
+
+  const skillItems = [
+    {
+      name: 'Vocabulary',
+      nameVi: 'Từ Vựng',
+      path: '/vocabulary',
+      id: 'nav-vocabulary-link',
+      icon: BookOpen,
+      color: 'text-indigo-600 bg-indigo-500/10 dark:text-indigo-400',
+      description: 'Flashcards, topics & word lists',
+    },
+    {
+      name: 'Grammar',
+      nameVi: 'Ngữ Pháp',
+      path: '/grammar',
+      id: 'nav-grammar-link',
+      icon: BookA,
+      color: 'text-amber-600 bg-amber-500/10 dark:text-amber-400',
+      description: 'Rules, categories & exercises',
+    },
+    {
+      name: 'Listening',
+      nameVi: 'Luyện Nghe',
+      path: '/listening',
+      id: 'nav-listening-link',
+      icon: Headphones,
+      color: 'text-blue-600 bg-blue-500/10 dark:text-blue-400',
+      description: 'Audio lessons & quizzes',
+    },
+    {
+      name: 'Reading',
+      nameVi: 'Luyện Đọc',
+      path: '/reading',
+      id: 'nav-reading-link',
+      icon: BookMarked,
+      color: 'text-emerald-600 bg-emerald-500/10 dark:text-emerald-400',
+      description: 'Articles, stories & comprehension',
+    },
+  ];
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 shadow-xs">
-      <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-3 sm:px-6">
+      <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-3 sm:px-6">
         {/* Left Section: Logo & Desktop Navigation */}
-        <div className="flex items-center gap-2 xl:gap-6 min-w-0">
+        <div className="flex items-center gap-3 xl:gap-6 shrink-0">
           <Link
             to="/"
             className="flex items-center gap-2 sm:gap-2.5 transition-opacity hover:opacity-90 shrink-0"
@@ -76,10 +141,10 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden items-center gap-1 xl:gap-1.5 text-sm font-medium lg:flex min-w-0">
+          <nav className="hidden items-center gap-1 xl:gap-1.5 text-xs xl:text-sm font-medium lg:flex shrink-0">
             <Link
               to="/"
-              className={`hidden xl:inline-flex items-center rounded-lg px-2.5 py-1.5 text-xs xl:text-sm font-medium whitespace-nowrap shrink-0 transition-colors ${
+              className={`hidden 2xl:inline-flex items-center rounded-lg px-2.5 py-1.5 font-medium whitespace-nowrap shrink-0 transition-colors ${
                 isActive('/')
                   ? 'bg-primary/10 text-primary font-semibold'
                   : 'text-muted-foreground hover:bg-accent hover:text-foreground'
@@ -92,7 +157,7 @@ export const Navbar: React.FC = () => {
                 <Link
                   to="/dashboard"
                   id="nav-dashboard-link"
-                  className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 xl:px-2.5 text-xs xl:text-sm font-medium whitespace-nowrap shrink-0 transition-colors ${
+                  className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-medium whitespace-nowrap shrink-0 transition-colors ${
                     isActive('/dashboard')
                       ? 'bg-primary/10 text-primary font-semibold'
                       : 'text-muted-foreground hover:bg-accent hover:text-foreground'
@@ -101,58 +166,88 @@ export const Navbar: React.FC = () => {
                   <LayoutDashboard className="h-3.5 w-3.5 xl:h-4 xl:w-4 shrink-0" />
                   <span>Dashboard</span>
                 </Link>
-                <Link
-                  to="/vocabulary"
-                  id="nav-vocabulary-link"
-                  className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 xl:px-2.5 text-xs xl:text-sm font-medium whitespace-nowrap shrink-0 transition-colors ${
-                    isActive('/vocabulary')
-                      ? 'bg-primary/10 text-primary font-semibold'
-                      : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                  }`}
-                >
-                  <BookOpen className="h-3.5 w-3.5 xl:h-4 xl:w-4 shrink-0" />
-                  <span>Vocabulary</span>
-                </Link>
-                <Link
-                  to="/grammar"
-                  id="nav-grammar-link"
-                  className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 xl:px-2.5 text-xs xl:text-sm font-medium whitespace-nowrap shrink-0 transition-colors ${
-                    isActive('/grammar')
-                      ? 'bg-primary/10 text-primary font-semibold'
-                      : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                  }`}
-                >
-                  <BookA className="h-3.5 w-3.5 xl:h-4 xl:w-4 shrink-0" />
-                  <span>Grammar</span>
-                </Link>
-                <Link
-                  to="/listening"
-                  id="nav-listening-link"
-                  className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 xl:px-2.5 text-xs xl:text-sm font-medium whitespace-nowrap shrink-0 transition-colors ${
-                    isActive('/listening')
-                      ? 'bg-primary/10 text-primary font-semibold'
-                      : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                  }`}
-                >
-                  <Headphones className="h-3.5 w-3.5 xl:h-4 xl:w-4 shrink-0" />
-                  <span>Listening</span>
-                </Link>
-                <Link
-                  to="/reading"
-                  id="nav-reading-link"
-                  className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 xl:px-2.5 text-xs xl:text-sm font-medium whitespace-nowrap shrink-0 transition-colors ${
-                    isActive('/reading')
-                      ? 'bg-primary/10 text-primary font-semibold'
-                      : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                  }`}
-                >
-                  <BookMarked className="h-3.5 w-3.5 xl:h-4 xl:w-4 shrink-0" />
-                  <span>Reading</span>
-                </Link>
+
+                {/* Skills Dropdown Popover with 100% Solid/Opaque Background */}
+                <div className="relative" ref={skillsRef}>
+                  <button
+                    type="button"
+                    id="nav-skills-dropdown"
+                    onClick={() => setSkillsOpen((prev) => !prev)}
+                    className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-medium whitespace-nowrap shrink-0 transition-colors ${
+                      isSkillsActive || skillsOpen
+                        ? 'bg-primary/10 text-primary font-semibold'
+                        : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+                    }`}
+                    aria-expanded={skillsOpen}
+                    aria-haspopup="true"
+                  >
+                    <BookOpen className="h-3.5 w-3.5 xl:h-4 xl:w-4 shrink-0" />
+                    <span>Skills</span>
+                    <ChevronDown
+                      className={`h-3 w-3 xl:h-3.5 xl:w-3.5 shrink-0 opacity-70 transition-transform duration-200 ${
+                        skillsOpen ? 'rotate-180 text-primary' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {/* Skills Dropdown Popup Menu (Guaranteed 100% solid opaque background) */}
+                  {skillsOpen && (
+                    <div
+                      id="skills-dropdown-menu"
+                      className="absolute left-0 top-full mt-2 w-72 rounded-2xl border border-border bg-card p-2 shadow-2xl z-50 animate-in fade-in-0 zoom-in-95 duration-150"
+                      style={{
+                        backgroundColor: theme === 'dark' ? '#0b1120' : '#ffffff',
+                      }}
+                    >
+                      <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground border-b border-border/50 mb-1">
+                        Core Skills
+                      </div>
+                      <div className="space-y-1">
+                        {skillItems.map((item) => {
+                          const Icon = item.icon;
+                          const active = isActive(item.path);
+                          return (
+                            <Link
+                              key={item.path}
+                              to={item.path}
+                              id={item.id}
+                              onClick={() => setSkillsOpen(false)}
+                              className={`flex items-start gap-3 rounded-xl p-2.5 transition-colors ${
+                                active
+                                  ? 'bg-primary/15 text-primary font-semibold'
+                                  : 'hover:bg-accent/80 hover:text-foreground text-foreground'
+                              }`}
+                            >
+                              <div
+                                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${item.color}`}
+                              >
+                                <Icon className="h-4 w-4" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-sm font-bold leading-tight">
+                                    {item.name}
+                                  </span>
+                                  <span className="text-[10px] text-muted-foreground">
+                                    {item.nameVi}
+                                  </span>
+                                </div>
+                                <p className="text-[11px] text-muted-foreground line-clamp-1 mt-0.5 font-normal">
+                                  {item.description}
+                                </p>
+                              </div>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <Link
                   to="/quizzes"
                   id="nav-quizzes-link"
-                  className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 xl:px-2.5 text-xs xl:text-sm font-medium whitespace-nowrap shrink-0 transition-colors ${
+                  className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-medium whitespace-nowrap shrink-0 transition-colors ${
                     isActive('/quizzes')
                       ? 'bg-primary/10 text-primary font-semibold'
                       : 'text-muted-foreground hover:bg-accent hover:text-foreground'
@@ -161,17 +256,18 @@ export const Navbar: React.FC = () => {
                   <Trophy className="h-3.5 w-3.5 xl:h-4 xl:w-4 shrink-0" />
                   <span>Quizzes</span>
                 </Link>
+
                 <Link
-                  to="/profile"
-                  id="nav-profile-link"
-                  className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 xl:px-2.5 text-xs xl:text-sm font-medium whitespace-nowrap shrink-0 transition-colors ${
-                    isActive('/profile')
+                  to="/progress"
+                  id="nav-progress-link"
+                  className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-medium whitespace-nowrap shrink-0 transition-colors ${
+                    isActive('/progress')
                       ? 'bg-primary/10 text-primary font-semibold'
                       : 'text-muted-foreground hover:bg-accent hover:text-foreground'
                   }`}
                 >
-                  <UserIcon className="h-3.5 w-3.5 xl:h-4 xl:w-4 shrink-0" />
-                  <span>Profile</span>
+                  <TrendingUp className="h-3.5 w-3.5 xl:h-4 xl:w-4 shrink-0" />
+                  <span>Progress</span>
                 </Link>
               </>
             )}
@@ -179,7 +275,7 @@ export const Navbar: React.FC = () => {
         </div>
 
         {/* Right Section: Theme Toggle, User Profile, Logout & Mobile Toggle */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-auto">
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
@@ -196,6 +292,7 @@ export const Navbar: React.FC = () => {
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               <Link
                 to="/profile"
+                id="nav-profile-link"
                 className="flex items-center gap-1.5 sm:gap-2 rounded-lg border border-border/80 bg-card/60 px-2 sm:px-2.5 py-1 sm:py-1.5 text-xs font-medium transition-colors hover:bg-accent shrink-0"
               >
                 {user.avatar ? (
@@ -326,66 +423,29 @@ export const Navbar: React.FC = () => {
                     </div>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </Link>
-                  <Link
-                    to="/vocabulary"
-                    onClick={() => setMobileOpen(false)}
-                    className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                      isActive('/vocabulary')
-                        ? 'bg-primary/10 text-primary font-semibold'
-                        : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <BookOpen className="h-4 w-4" />
-                      <span>Vocabulary</span>
-                    </div>
-                    <ChevronRight className="h-4 w-4 opacity-50" />
-                  </Link>
-                  <Link
-                    to="/grammar"
-                    onClick={() => setMobileOpen(false)}
-                    className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                      isActive('/grammar')
-                        ? 'bg-primary/10 text-primary font-semibold'
-                        : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <BookA className="h-4 w-4" />
-                      <span>Grammar</span>
-                    </div>
-                    <ChevronRight className="h-4 w-4 opacity-50" />
-                  </Link>
-                  <Link
-                    to="/listening"
-                    onClick={() => setMobileOpen(false)}
-                    className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                      isActive('/listening')
-                        ? 'bg-primary/10 text-primary font-semibold'
-                        : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <Headphones className="h-4 w-4" />
-                      <span>Listening</span>
-                    </div>
-                    <ChevronRight className="h-4 w-4 opacity-50" />
-                  </Link>
-                  <Link
-                    to="/reading"
-                    onClick={() => setMobileOpen(false)}
-                    className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                      isActive('/reading')
-                        ? 'bg-primary/10 text-primary font-semibold'
-                        : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <BookMarked className="h-4 w-4" />
-                      <span>Reading</span>
-                    </div>
-                    <ChevronRight className="h-4 w-4 opacity-50" />
-                  </Link>
+
+                  {skillItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        onClick={() => setMobileOpen(false)}
+                        className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                          isActive(item.path)
+                            ? 'bg-primary/10 text-primary font-semibold'
+                            : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Icon className="h-4 w-4" />
+                          <span>{item.name}</span>
+                        </div>
+                        <ChevronRight className="h-4 w-4 opacity-50" />
+                      </Link>
+                    );
+                  })}
+
                   <Link
                     to="/quizzes"
                     onClick={() => setMobileOpen(false)}
@@ -401,6 +461,23 @@ export const Navbar: React.FC = () => {
                     </div>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </Link>
+
+                  <Link
+                    to="/progress"
+                    onClick={() => setMobileOpen(false)}
+                    className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                      isActive('/progress')
+                        ? 'bg-primary/10 text-primary font-semibold'
+                        : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <TrendingUp className="h-4 w-4" />
+                      <span>Progress</span>
+                    </div>
+                    <ChevronRight className="h-4 w-4 opacity-50" />
+                  </Link>
+
                   <Link
                     to="/profile"
                     onClick={() => setMobileOpen(false)}
@@ -437,4 +514,3 @@ export const Navbar: React.FC = () => {
     </header>
   );
 };
-

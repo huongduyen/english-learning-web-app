@@ -1,12 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AchievementsService } from '../achievements/achievements.service';
+import { DailyGoalsService } from '../daily-goals/daily-goals.service';
 import { QuizQueryDto } from './dto/quiz-query.dto';
 import { SubmitQuizDto } from './dto/submit-quiz.dto';
 import { ActivityType, Prisma } from '@prisma/client';
 
 @Injectable()
 export class QuizService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Optional() private readonly achievementsService?: AchievementsService,
+    @Optional() private readonly dailyGoalsService?: DailyGoalsService,
+  ) {}
 
   async findAll(query: QuizQueryDto) {
     const { page = 1, limit = 20, search, level, difficulty } = query;
@@ -268,6 +274,17 @@ export class QuizService {
       where: { userId },
       data: { totalXp: { increment: xpReward } },
     });
+
+    // 4. Update daily goal and auto-unlock achievements
+    if (this.dailyGoalsService) {
+      await this.dailyGoalsService.recordActivity(userId, {
+        minutes: quiz.timeLimit || 5,
+      });
+    }
+
+    if (this.achievementsService) {
+      await this.achievementsService.checkAndUnlockAchievements(userId);
+    }
 
     return {
       attemptId: attempt.id,

@@ -1,7 +1,8 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ProgressService } from './progress.service';
 import { ActivityQueryDto } from './dto/activity-query.dto';
+import { CreateActivityDto } from './dto/create-activity.dto';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { OptionalJwtAuthGuard } from '../../common/guards/optional-jwt-auth.guard';
 
@@ -16,10 +17,24 @@ export class ProgressController {
   @ApiOperation({ summary: 'Get current user overall learning progress and statistics' })
   @ApiResponse({
     status: 200,
-    description: 'Summary statistics including XP, streak, vocabularies, and quizzes',
+    description: 'Summary statistics including XP, streak, vocabularies, skills, and quizzes',
   })
   async getProgress(@CurrentUser() userId: string) {
     return this.progressService.getUserProgress(userId);
+  }
+
+  @Get('weekly')
+  @ApiOperation({ summary: 'Get 7-day weekly activity breakdown for charting' })
+  @ApiResponse({ status: 200, description: 'List of past 7 days study minutes and activities' })
+  async getWeekly(@CurrentUser() userId: string) {
+    return this.progressService.getWeeklyActivity(userId);
+  }
+
+  @Post('activity')
+  @ApiOperation({ summary: 'Log a new learning activity and trigger achievement checks' })
+  @ApiResponse({ status: 201, description: 'Created activity and unlocked achievements' })
+  async logActivity(@CurrentUser() userId: string, @Body() dto: CreateActivityDto) {
+    return this.progressService.logActivity(userId, dto);
   }
 
   @Get('activities')

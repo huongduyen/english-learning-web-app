@@ -95,16 +95,18 @@ model User {
 }
 
 model UserProfile {
-  id               String       @id @default(uuid())
-  userId           String       @unique
-  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  targetLevel      EnglishLevel @default(INTERMEDIATE)
-  nativeLanguage   String       @default("vi")
-  dailyGoalMinutes Int          @default(15)
-  streakDays       Int          @default(0)
-  totalXp          Int          @default(0)
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
+  id                String       @id @default(uuid())
+  userId            String       @unique
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetLevel       EnglishLevel @default(INTERMEDIATE)
+  nativeLanguage    String       @default("vi")
+  dailyGoalMinutes  Int          @default(15)
+  streakDays        Int          @default(0)
+  longestStreakDays Int          @default(0)
+  totalXp           Int          @default(0)
+  lastActiveDate    DateTime?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 
   @@map("user_profiles")
 }

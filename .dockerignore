@@ -1,0 +1,15 @@
+# Root Docker Ignore
+node_modules
+*/node_modules
+dist
+*/dist
+coverage
+*/coverage
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+*.log
+test-results
+playwright-report

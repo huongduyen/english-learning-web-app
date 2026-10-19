@@ -1,0 +1,18 @@
+# Frontend Docker Ignore
+node_modules
+dist
+coverage
+e2e
+test-results
+playwright-report
+blob-report
+playwright/.cache
+*.log
+npm-debug.log*
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+.eslintrc*
+.prettierrc*

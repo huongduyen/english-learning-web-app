@@ -1,0 +1,15 @@
+# Backend Docker Ignore
+node_modules
+dist
+test
+coverage
+*.log
+npm-debug.log*
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+.eslintrc*
+.prettierrc*

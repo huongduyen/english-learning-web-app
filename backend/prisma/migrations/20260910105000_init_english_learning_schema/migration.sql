@@ -14,7 +14,7 @@ CREATE TYPE "VocabularyStatus" AS ENUM ('NEW', 'LEARNING', 'REVIEWING', 'MASTERE
 CREATE TYPE "ActivityType" AS ENUM ('VOCABULARY', 'GRAMMAR', 'LISTENING', 'READING', 'QUIZ', 'CONVERSATION', 'SPEAKING');
 
 -- CreateEnum
-CREATE TYPE "QuestionType" AS ENUM ('MULTIPLE_CHOICE', 'FILL_BLANK', 'MATCHING', 'TRUE_FALSE');
+CREATE TYPE "QuestionType" AS ENUM ('MULTIPLE_CHOICE', 'FILL_BLANK', 'MATCHING', 'TRUE_FALSE', 'SENTENCE_ORDERING', 'SENTENCE_CORRECTION');
 
 -- CreateEnum
 CREATE TYPE "MessageRole" AS ENUM ('USER', 'ASSISTANT', 'SYSTEM');
@@ -27,6 +27,8 @@ CREATE TABLE "users" (
     "avatar" TEXT,
     "role" "UserRole" NOT NULL DEFAULT 'LEARNER',
     "level" "EnglishLevel" NOT NULL DEFAULT 'BEGINNER',
+    "password" TEXT NOT NULL,
+    "hashedRefreshToken" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -41,7 +43,9 @@ CREATE TABLE "user_profiles" (
     "nativeLanguage" TEXT NOT NULL DEFAULT 'vi',
     "dailyGoalMinutes" INTEGER NOT NULL DEFAULT 15,
     "streakDays" INTEGER NOT NULL DEFAULT 0,
+    "longestStreakDays" INTEGER NOT NULL DEFAULT 0,
     "totalXp" INTEGER NOT NULL DEFAULT 0,
+    "lastActiveDate" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -92,6 +96,7 @@ CREATE TABLE "user_vocabularies" (
     "status" "VocabularyStatus" NOT NULL DEFAULT 'NEW',
     "reviewCount" INTEGER NOT NULL DEFAULT 0,
     "masteryScore" INTEGER NOT NULL DEFAULT 0,
+    "isFavorite" BOOLEAN NOT NULL DEFAULT false,
     "lastReviewedAt" TIMESTAMP(3),
     "nextReviewAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -106,6 +111,8 @@ CREATE TABLE "grammar_lessons" (
     "slug" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "titleVi" TEXT NOT NULL,
+    "category" TEXT NOT NULL DEFAULT 'Basic Grammar',
+    "categoryVi" TEXT,
     "summary" TEXT,
     "content" TEXT NOT NULL,
     "level" "EnglishLevel" NOT NULL DEFAULT 'BEGINNER',
@@ -141,6 +148,8 @@ CREATE TABLE "listening_lessons" (
     "title" TEXT NOT NULL,
     "titleVi" TEXT NOT NULL,
     "description" TEXT,
+    "topic" TEXT,
+    "difficulty" "Difficulty" NOT NULL DEFAULT 'EASY',
     "audioUrl" TEXT NOT NULL,
     "duration" INTEGER,
     "transcript" TEXT NOT NULL,
@@ -159,6 +168,8 @@ CREATE TABLE "reading_articles" (
     "title" TEXT NOT NULL,
     "titleVi" TEXT NOT NULL,
     "summary" TEXT,
+    "topic" TEXT,
+    "difficulty" "Difficulty" NOT NULL DEFAULT 'EASY',
     "content" TEXT NOT NULL,
     "contentVi" TEXT,
     "level" "EnglishLevel" NOT NULL DEFAULT 'BEGINNER',
@@ -180,6 +191,7 @@ CREATE TABLE "quizzes" (
     "passingScore" INTEGER NOT NULL DEFAULT 70,
     "listeningLessonId" TEXT,
     "readingArticleId" TEXT,
+    "grammarLessonId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -352,6 +364,9 @@ CREATE INDEX "grammar_lessons_slug_idx" ON "grammar_lessons"("slug");
 CREATE INDEX "grammar_lessons_level_idx" ON "grammar_lessons"("level");
 
 -- CreateIndex
+CREATE INDEX "grammar_lessons_category_idx" ON "grammar_lessons"("category");
+
+-- CreateIndex
 CREATE INDEX "grammar_exercises_lessonId_idx" ON "grammar_exercises"("lessonId");
 
 -- CreateIndex
@@ -364,6 +379,9 @@ CREATE INDEX "listening_lessons_slug_idx" ON "listening_lessons"("slug");
 CREATE INDEX "listening_lessons_level_idx" ON "listening_lessons"("level");
 
 -- CreateIndex
+CREATE INDEX "listening_lessons_difficulty_idx" ON "listening_lessons"("difficulty");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "reading_articles_slug_key" ON "reading_articles"("slug");
 
 -- CreateIndex
@@ -373,10 +391,16 @@ CREATE INDEX "reading_articles_slug_idx" ON "reading_articles"("slug");
 CREATE INDEX "reading_articles_level_idx" ON "reading_articles"("level");
 
 -- CreateIndex
+CREATE INDEX "reading_articles_difficulty_idx" ON "reading_articles"("difficulty");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "quizzes_listeningLessonId_key" ON "quizzes"("listeningLessonId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "quizzes_readingArticleId_key" ON "quizzes"("readingArticleId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "quizzes_grammarLessonId_key" ON "quizzes"("grammarLessonId");
 
 -- CreateIndex
 CREATE INDEX "quizzes_level_idx" ON "quizzes"("level");
@@ -458,6 +482,9 @@ ALTER TABLE "quizzes" ADD CONSTRAINT "quizzes_listeningLessonId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "quizzes" ADD CONSTRAINT "quizzes_readingArticleId_fkey" FOREIGN KEY ("readingArticleId") REFERENCES "reading_articles"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "quizzes" ADD CONSTRAINT "quizzes_grammarLessonId_fkey" FOREIGN KEY ("grammarLessonId") REFERENCES "grammar_lessons"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "questions" ADD CONSTRAINT "questions_quizId_fkey" FOREIGN KEY ("quizId") REFERENCES "quizzes"("id") ON DELETE CASCADE ON UPDATE CASCADE;

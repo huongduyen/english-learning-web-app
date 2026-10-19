@@ -580,5 +580,50 @@ describe('Phase 3 Core REST API - Versioned /api/v1 (e2e)', () => {
       expect(res.body.statusCode).toBe(404);
       expect(res.body.error).toBe('Not Found');
     });
+
+    it('GET /api/v1/grammar/invalid-id - 404 on not found', async () => {
+      await request(app.getHttpServer())
+        .get('/api/v1/grammar/00000000-0000-0000-0000-000000000000')
+        .expect(404);
+    });
+
+    it('GET /api/v1/quizzes/invalid-id - 404 on not found', async () => {
+      await request(app.getHttpServer())
+        .get('/api/v1/quizzes/00000000-0000-0000-0000-000000000000')
+        .expect(404);
+    });
+
+    it('GET /api/v1/listening/invalid-id - 404 on not found', async () => {
+      await request(app.getHttpServer())
+        .get('/api/v1/listening/00000000-0000-0000-0000-000000000000')
+        .expect(404);
+    });
+
+    it('GET /api/v1/reading/invalid-id - 404 on not found', async () => {
+      await request(app.getHttpServer())
+        .get('/api/v1/reading/00000000-0000-0000-0000-000000000000')
+        .expect(404);
+    });
+
+    it('POST /api/v1/auth/login - 400 when email or password is missing', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/auth/login')
+        .send({ email: 'incomplete@example.com' })
+        .expect(400);
+    });
+
+    it('POST /api/v1/auth/register - 400 when email is invalid', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/auth/register')
+        .send({ email: 'not-an-email', password: 'Password123!' })
+        .expect(400);
+    });
+
+    it('PATCH /api/v1/users/me - 401 when token is missing', async () => {
+      await request(app.getHttpServer())
+        .patch('/api/v1/users/me')
+        .send({ name: 'Hacker' })
+        .expect(401);
+    });
   });
 });

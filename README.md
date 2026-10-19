@@ -166,28 +166,51 @@ Frontend application will be accessible at: `http://localhost:5173`
 
 ## Testing & Quality Control
 
-### Backend Tests & Linting
+Comprehensive testing documentation is available in [docs/testing.md](docs/testing.md).
+
+### Quick Commands (From Root)
 ```bash
-# Unit tests
-npm --prefix backend run test
+# Run backend unit tests
+npm run test:backend
 
-# E2E integration tests
-npm --prefix backend run test:e2e
+# Run backend unit tests with coverage
+npm run test:backend:cov
 
-# Linting
-npm --prefix backend run lint
+# Run backend API integration tests
+npm run test:backend:e2e
+
+# Run frontend unit & component tests
+npm run test:frontend
+
+# Run frontend tests with coverage
+npm run test:frontend:cov
+
+# Run full end-to-end (E2E) user flows (Playwright)
+npm run test:frontend:e2e
+
+# Code quality & linting
+npm run lint:backend
+npm run lint:frontend
 ```
 
-### Frontend Tests & Linting
+### Direct Workspace Commands
+
+#### Backend:
 ```bash
-# Type check and build
-npm --prefix frontend run build
+npm --prefix backend run test        # Unit tests (Jest)
+npm --prefix backend run test:cov    # Coverage report
+npm --prefix backend run test:e2e    # API integration tests (Supertest)
+npm --prefix backend run lint        # ESLint
+```
 
-# Linting
-npm --prefix frontend run lint
-
-# E2E tests (Playwright)
-npm --prefix frontend run test:e2e
+#### Frontend:
+```bash
+npm --prefix frontend run test            # Unit/component tests (Vitest)
+npm --prefix frontend run test:coverage   # Coverage report
+npm --prefix frontend run test:e2e        # Playwright E2E tests
+npm --prefix frontend run typecheck       # TypeScript type checking
+npm --prefix frontend run lint            # ESLint
+npm --prefix frontend run build           # Production bundle build
 ```
 
 ### Database Schema Validation

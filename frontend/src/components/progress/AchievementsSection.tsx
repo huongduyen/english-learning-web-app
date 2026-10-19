@@ -91,6 +91,7 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({
           <div className="inline-flex rounded-xl border border-border bg-background p-1 text-xs">
             <button
               type="button"
+              id="achievement-filter-all"
               onClick={() => setFilter('all')}
               className={`rounded-lg px-2.5 py-1 font-semibold transition-colors ${
                 filter === 'all'
@@ -102,6 +103,7 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({
             </button>
             <button
               type="button"
+              id="achievement-filter-unlocked"
               onClick={() => setFilter('unlocked')}
               className={`rounded-lg px-2.5 py-1 font-semibold transition-colors ${
                 filter === 'unlocked'
@@ -113,6 +115,7 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({
             </button>
             <button
               type="button"
+              id="achievement-filter-in-progress"
               onClick={() => setFilter('in-progress')}
               className={`rounded-lg px-2.5 py-1 font-semibold transition-colors ${
                 filter === 'in-progress'

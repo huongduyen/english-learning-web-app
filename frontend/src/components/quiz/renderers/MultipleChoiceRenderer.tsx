@@ -60,6 +60,8 @@ export const MultipleChoiceRenderer: React.FC<Props> = ({
           <button
             key={opt.id || idx}
             type="button"
+            id={`quiz-option-${idx}`}
+            data-testid="quiz-option"
             disabled={disabled}
             onClick={() => onSelectAnswer(opt.id || opt.text)}
             className={`group relative flex items-center justify-between rounded-xl border p-4 text-left transition-all ${buttonStyle} ${

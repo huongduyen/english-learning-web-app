@@ -47,6 +47,8 @@ export const TrueFalseRenderer: React.FC<Props> = ({
           <button
             key={choice.value}
             type="button"
+            id={`quiz-tf-option-${choice.value}`}
+            data-testid="quiz-option"
             disabled={disabled}
             onClick={() => onSelectAnswer(choice.value)}
             className={`flex flex-col items-center justify-center gap-3 rounded-2xl border p-6 text-center transition-all ${style} ${

@@ -16,12 +16,17 @@ build/
 .next/
 out/
 
-# Environment Variables
+# Environment & Secrets (Do not commit secrets, passwords, or keys)
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+*.env
+*.key
+*.pem
+*.cert
+*.crt
+credentials.json
+secrets/
 
 # Logs
 npm-debug.log*
